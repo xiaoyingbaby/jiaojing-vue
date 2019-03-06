@@ -1,4 +1,4 @@
-    
+
 body,ol,ul,h1,h2,h3,h4,h5,h6,p,th,td,dl,dd,form,fieldset,legend,input,textarea,select{margin:0;padding:0}
 body{-webkit-text-size-adjust:100%;font-size:14px;font-weight: bold;}
 a{color:#177cb0;;text-decoration:none}
@@ -9,12 +9,12 @@ img{border:0;}
 table{border-collapse:collapse;border-spacing:0}
 p{word-wrap:break-word}
 *{box-sizing:border-box;}
-.icon{
+/* .icon{
     width: 1em; height: 1em;
     vertical-align: -0.15em;
     fill: currentColor;
     overflow: hidden;
-}
+} */
 /*清浮动*/
 .clearfix:before,
 .clearfix:after{
