@@ -25,6 +25,10 @@
 </template>
 
 <script>
+import axios from 'axios'
+import qs from 'qs'
+import { authLogin } from '../../api/index.js';
+import {post} from '../../api/request.js';
 export default {
 	name: 'HelloWorld',
 	data () {
@@ -68,8 +72,33 @@ export default {
             },
             disabled: false
 		}
-    },
+	},
+	mounted(){
+		this.getinit()
+	},
     methods: {
+		getinit(){
+			let params = {
+				"username":"system",
+				"password":"Tony@123",
+				"remember_me":0  // 记住我 0 不记，1记
+
+			}
+			// post('/v1.0/auth/login', param)
+			// .then(function (response) {
+			// 	console.log(response);
+			// })
+			// .catch(function (error) {
+			// 	console.log(error);
+			// });
+			authLogin(params)
+            .then(function (response) {
+				console.log(response);
+			})
+			.catch(function (error) {
+				console.log(error);
+			});
+		},
         // 点击提交
 		submitForm : function(){
 			this.$refs.loginForm.validate((valid) => {
