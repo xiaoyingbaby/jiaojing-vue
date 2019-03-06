@@ -50,10 +50,7 @@
 				</div>
 				<el-main class="container-main">
                     <el-header class="app-header">
-                        <el-radio-group v-model="isCollapse" style="margin-bottom: 20px;">
-                            <el-radio-button :label="false">展开</el-radio-button>
-                            <el-radio-button :label="true">收起</el-radio-button>
-                        </el-radio-group>
+                       <i class="el-icon-menu collapse-icon" @click="toggleMenu"></i>
                     </el-header>
                     <router-view/>
                 </el-main>
@@ -107,12 +104,23 @@ export default {
         this.openeds = openeds;
         console.log(this.$router);
         // console.log(this.$route.path)
+    },
+    methods: {
+        toggleMenu(){
+            this.isCollapse = !this.isCollapse;
+        }
     }
 }
 </script>
 
 <style lang='less' scoped>
-
+@theme-color: #409EFF;
+.collapse-icon{
+    cursor: pointer;
+    &:hover{
+        color: @theme-color;
+    }
+}
 .app-header{
     line-height: 60px;
     background: #F7F9F2;
