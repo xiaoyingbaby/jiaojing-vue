@@ -13,7 +13,9 @@
 						router
 						unique-opened
 						:default-openeds="openeds"
+                        text-color="#fff"
 						background-color="#545c64"
+                        active-text-color="#ffd04b"
                         :collapse = isCollapse
 					>
 						<template v-for="(item,index) in $router.options.routes" v-if="!item.hidden">
