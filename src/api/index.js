@@ -1,12 +1,13 @@
 import axios from 'axios';
 let base = '/';
-import { get, post } from './request'
+import { http } from './http'
 
-// 获取所有文章
-export const authLogin = params => {
-    console.log(params,'params')
-    return post(`${base}/v1.0/auth/login`, params);
+export default{
+    authLogin(param,callbak) {
+        return http.post(`${baseUrl}/v1.0/auth/login`, param, callbak)
+    }
 }
+
 
 // 上传图片
 // export const uploadImg = params => {

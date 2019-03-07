@@ -25,10 +25,7 @@
 </template>
 
 <script>
-import axios from 'axios'
-import qs from 'qs'
-import { authLogin } from '../../api/index.js';
-import {post} from '../../api/request.js';
+// import { authLogin } from '../../api/index.js';
 export default {
 	name: 'HelloWorld',
 	data () {
@@ -91,13 +88,13 @@ export default {
 			// .catch(function (error) {
 			// 	console.log(error);
 			// });
-			authLogin(params)
-            .then(function (response) {
-				console.log(response);
-			})
-			.catch(function (error) {
-				console.log(error);
-			});
+			// authLogin(params)
+            // .then(function (response) {
+			// 	console.log(response);
+			// })
+			// .catch(function (error) {
+			// 	console.log(error);
+			// });
 		},
         // 点击提交
 		submitForm : function(){
