@@ -1,6 +1,5 @@
-import axios from 'axios';
-let base = '/';
-import { http } from './http'
+const baseUrl = process.env.API_URL ? process.env.API_URL : '';
+import http from './http'
 
 export default{
     authLogin(param,callbak) {

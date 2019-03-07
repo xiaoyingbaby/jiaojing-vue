@@ -25,7 +25,7 @@
 </template>
 
 <script>
-// import { authLogin } from '../../api/index.js';
+import Api  from '../../api/index.js';
 export default {
 	name: 'HelloWorld',
 	data () {
@@ -88,13 +88,13 @@ export default {
 			// .catch(function (error) {
 			// 	console.log(error);
 			// });
-			// authLogin(params)
-            // .then(function (response) {
-			// 	console.log(response);
-			// })
-			// .catch(function (error) {
-			// 	console.log(error);
-			// });
+			Api.authLogin(params)
+            .then(function (response) {
+				console.log(response);
+			})
+			.catch(function (error) {
+				console.log(error);
+			});
 		},
         // 点击提交
 		submitForm : function(){
