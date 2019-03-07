@@ -46,11 +46,23 @@ service.interceptors.response.use(function(response){
    // },
         return response
     },function(error){
-        Message({
-            Message:error.message,
-            type:'error',
-            duration:5*1000 
-        })
+        // 清空token，跳转到登陆页
+        if(error.response.status === 401){
+            console.log(error.response.data.error_msg,'error');
+            Message({
+                message:error.response.data.error_msg,
+                type:'error',
+                duration: 4*1000 
+            })
+        // 无权限
+        }else if(rror.response.status === 403){
+            Message({
+                message:'权限错误！',
+                type:'error',
+                duration: 4*1000 
+            })
+        }
+        
         return Promise.reject(error)
     }
  )
