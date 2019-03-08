@@ -109,6 +109,7 @@ export default {
 		},
         // 点击提交
 		submitForm : function(){
+			let self = this;
 			this.$refs.loginForm.validate((valid) => {
 				// 通过校验
 				if(valid){
@@ -137,31 +138,26 @@ export default {
 					if(remember_me){
 						_remember_me = 1;
 					}
-					console.log(userName.trim())
 					let params = {
 						"username": userName.trim(),
-						"password":"Tony@123",
-						"remember_me":0  // 记住我 0 不记，1记
+						"password":passWord.trim(),
+						"remember_me":_remember_me  // 记住我 0 不记，1记
 
 					}
 					Api.authLogin(params)
-					.then(function (response) {
-						console.log(response);
+					.then((response) =>{
+						this.disabled = false;
+						if(response && response.status === 200){
+							this.$router.push({name: "unexam"});
+						}else{
+
+						}
+						
+						
 					})
 					.catch(function (error) {
-						console.log(error);
+						this.disabled = false;
 					});
-					// Api.authLogin({
-					// 	userName: userName.trim(),
-					// 	password: passWord.trim(),
-					// 	remember_me: _remember_me
-					// })
-					// .then(function (response) {
-					// 	this.disabled = false;
-					// })
-					// .catch(function (error) {
-					// 	this.disabled = false;
-					// });
 				}else{
 					return false;
 				}

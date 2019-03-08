@@ -7,7 +7,7 @@ import Login from '@/page/login'
 
 Vue.use(Router)
 
-export default new Router({
+const router =  new Router({
 	routes: [
 		{
 			path: '/login',
@@ -19,7 +19,10 @@ export default new Router({
 			path: '/unexam',
 			name: '通行证审批',
 			icon: 'iconshenpi',
-			component: Unexam
+			component: Unexam,
+			// meta: { 
+			// 	requireAuth: true
+			// },
 		},
 		{
 			path: '/examed',
@@ -35,3 +38,24 @@ export default new Router({
 		}
 	]
 })
+
+// 路由拦截
+router.beforeEach((to, from, next) => {
+	if (to.matched.some(res => res.meta.requireAuth )) {// 判断是否需要登录权限
+		if (localStorage.getItem('username')) {// 判断是否登录
+
+			next()
+
+		} else {// 没登录则跳转到登录界面
+
+			next({
+				path: '/login',
+				query: {redirect: to.fullPath}
+			})
+		}
+	} else {
+		next()
+	}
+})
+
+export default router

@@ -1,5 +1,8 @@
 import axios from 'axios'
 import { Message } from 'element-ui';
+import store from '../store'
+import router from '../router'
+import localDb from '../util/localDb'
 import qs from 'qs'
 
 //系统所有请求路径
@@ -10,11 +13,16 @@ var service=axios.create({
     timeout:5000
 })
 
- //添加请求拦截器
+function isLogin() {
+    return localDb.get('session')
+}
+
+
+//添加请求拦截器
 service.interceptors.request.use(function(config){
-    // if(store.getters.token){
-    //     config.headers['TOKEN']=getCookie('TOKEN')
-    // }
+    if(store.getters.token){
+        config.headers['TOKEN'] = getCookie('TOKEN')
+    }
     return config
 },function(error){
     return Promise.reject(error)
@@ -23,7 +31,6 @@ service.interceptors.request.use(function(config){
 //添加响应拦截器
 service.interceptors.response.use(function(response){
     
-    console.log('res',response)
     /**
     * 下面的注释为通过在response里，自定义code来标示请求状态
     * 当code返回如下情况则说明权限有问题，登出并返回到登录页
@@ -46,24 +53,32 @@ service.interceptors.response.use(function(response){
    // },
         return response
     },function(error){
+        console.log('err',error)
         // 清空token，跳转到登陆页
-        if(error.response.status === 401){
-            console.log(error.response.data.error_msg,'error');
-            Message({
-                message:error.response.data.error_msg,
-                type:'error',
-                duration: 4*1000 
-            })
-        // 无权限
-        }else if(rror.response.status === 403){
-            Message({
-                message:'权限错误！',
-                type:'error',
-                duration: 4*1000 
-            })
+        if(error && error.response){
+            if(error.response.status === 401){
+                console.log(error.response.data.error_msg,'error');
+                Message({
+                    message:error.response.data.error_msg,
+                    type:'error',
+                    duration: 4*1000 
+                })
+                router.replace({
+                    path: 'login',
+                    query: {redirect: router.currentRoute.fullPath}
+                })
+            // 无权限
+            }else if(rror.response.status === 403){
+                Message({
+                    message:'权限错误！',
+                    type:'error',
+                    duration: 4*1000 
+                })
+            }
         }
         
-        return Promise.reject(error)
+        
+        return Promise.resolve(error)
     }
  )
 
@@ -72,7 +87,7 @@ class Http {
     get(url, params, callback) { // GET请求
         // const newUrl = params ? this.build(url, params) : url
         if (body) options.body = JSON.stringify(body)
-        return (url, {
+        return this.request(url, {
             method: 'GET',
             body: params
         }, callback)
@@ -118,29 +133,34 @@ class Http {
             }).then(function(response) {
                 //模拟数据
                 //请求返回处理
-                if (!response) {
-                    throw "服务器返回参数错误"
-                } else if (response.result == true){
-                    //处理数据
-                    if(!resCallBack){
-                        callback(response.data)
-                    }else{
-                        callback(response);
-                    }
-                }else if (response.result == false){
-                    //错误的情况
-                    console.log('err'+error)
-                    message.warning(response.result_message);
+                return response;
+                // if (!response) {
+                //     throw "服务器返回参数错误"
+                // } else if (response.result == true){
+                //     //处理数据
+                //     if(!resCallBack){
+                //         callback(response.data)
+                //     }else{
+                //         callback(response);
+                //     }
+                // }else if (response.result == false){
+                //     //错误的情况
+                //     console.log('err'+error)
+                //     message.warning(response.result_message);
 
-                } else if (response.errcode == 40001) {
+                // } else if (response.errcode == 40001) {
 
-                    throw "token失效，请刷新页面"
-                } else if (response.errcode == -1) {
+                //     throw "token失效，请刷新页面"
+                // } else if (response.errcode == -1) {
 
-                    return response
-                }
+                //     return response
+                // }
             })
-            .catch(err => console.error(err))
+            .catch(function (error) {
+                // alert(2333)
+                console.log(error,'err')
+                return Promise.resolve(error)
+            });
     }
     
     defaultHeader() { // 默认头
