@@ -63,10 +63,10 @@ service.interceptors.response.use(function(response){
                     type:'error',
                     duration: 4*1000 
                 })
-                router.replace({
-                    path: 'login',
-                    query: {redirect: router.currentRoute.fullPath}
-                })
+                // router.replace({
+                //     path: 'login',
+                //     query: {redirect: router.currentRoute.fullPath}
+                // })
             // 无权限
             }else if(rror.response.status === 403){
                 Message({

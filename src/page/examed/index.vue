@@ -181,10 +181,8 @@ export default {
         //     }
             
         // });
-        // 获取列表数据
-        this.getListData();
         // 获取机构列表
-        this.getOrg();
+        // this.getOrg();
     },
     mounted : function(){
         this.getListData();
@@ -264,7 +262,7 @@ export default {
                 state: 'FINISHED',
                 plate_number: ''
             }).then((response) =>{
-                    console.log(response);
+                    console.log(response)
                     
                     
                 })
@@ -275,26 +273,26 @@ export default {
         getOrg(){
             let self = this;
             // 获取组织机构下拉列表
-            ajax({
-                url:'/org/getALLOrgList',
-                type:'post',
-                data:{
-                },
-                success(res){
-                    if(res.success){
-                        res.rows.forEach((val,ind,arr) => {
-                            self.orgData.push({'title':val.orgName,'key':val.orgCode});
-                        });
+            // ajax({
+            //     url:'/org/getALLOrgList',
+            //     type:'post',
+            //     data:{
+            //     },
+            //     success(res){
+            //         if(res.success){
+            //             res.rows.forEach((val,ind,arr) => {
+            //                 self.orgData.push({'title':val.orgName,'key':val.orgCode});
+            //             });
                         
-                    }else{
-                        self.$message({
-                            message: res.errorMsg,
-                            type: 'warning'
-                        });
-                    };
-                }
+            //         }else{
+            //             self.$message({
+            //                 message: res.errorMsg,
+            //                 type: 'warning'
+            //             });
+            //         };
+            //     }
                 
-            });
+            // });
         },
         handleSizeChange(value){
             // pageSize变化
@@ -315,29 +313,29 @@ export default {
                 type: 'warning'
             }).then(() => {
                 self.loading = true;
-                ajax({
-                    url:'/literature/deleteLiterature',
-                    type:'post',
-                    data:{
-                        fileCode:row.fileCode
-                    },
-                    success(res){
-                        self.loading = false;
-                        if(res.success){
-                            self.getListData();
-                            self.$message({
-                                message: "删除成功",
-                                type: 'success'
-                            });
-                        }else{
-                            self.$message({
-                                message: res.errorMsg,
-                                type: 'warning'
-                            });
-                        };
-                    }
+                // ajax({
+                //     url:'/literature/deleteLiterature',
+                //     type:'post',
+                //     data:{
+                //         fileCode:row.fileCode
+                //     },
+                //     success(res){
+                //         self.loading = false;
+                //         if(res.success){
+                //             self.getListData();
+                //             self.$message({
+                //                 message: "删除成功",
+                //                 type: 'success'
+                //             });
+                //         }else{
+                //             self.$message({
+                //                 message: res.errorMsg,
+                //                 type: 'warning'
+                //             });
+                //         };
+                //     }
                     
-                });
+                // });
             }).catch(() => {
                 // this.$message({
                 //     type: 'info',
