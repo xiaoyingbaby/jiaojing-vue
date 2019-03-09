@@ -20,7 +20,7 @@ function isLogin() {
 
 //添加请求拦截器
 service.interceptors.request.use(function(config){
-    console.log(localDb.get('TOKEN'),'dddd')
+    // console.log(localDb.get('TOKEN'),'dddd')
     if(localDb.get('TOKEN')){
         config.headers['x-auth-token'] = localDb.get('TOKEN')
     }
@@ -92,13 +92,13 @@ service.interceptors.response.use(function(response){
 class Http {
     /* eslint-disable */
     get(url, params, callback) { // GET请求
-        // const newUrl = params ? this.build(url, params) : url
+        const newUrl = params ? this.build(url, params) : url
         let options = {
             method: 'GET'
         }
-        console.log(params,'sss')
-        if (params) options.body = params
-        return this.request(url, options, callback)
+        // console.log(params,'sss')
+        // if (params) options.body = params
+        return this.request(newUrl, options, callback)
     }
 
     post(url, body, callback) { // POST请求
@@ -137,7 +137,7 @@ class Http {
         return service({
                 method: options.method,
                 url: url,
-                data: options.body
+                data: options.body ? options.body : {}
             }).then(function(response) {
                 //模拟数据
                 //请求返回处理

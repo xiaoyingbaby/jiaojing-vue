@@ -125,7 +125,6 @@ export default {
 						"username": userName.trim(),
 						"password":passWord.trim(),
 						"remember_me":_remember_me  // 记住我 0 不记，1记
-
 					}
 					Api.authLogin(params)
 					.then((response) =>{
