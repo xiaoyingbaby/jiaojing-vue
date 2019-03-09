@@ -13,7 +13,7 @@
         <div class="examed">
              <el-form :inline="true" :model="examedForm" class="demo-form-inline" empty-text="暂无数据" :rules='examedFormRule' ref='examedForm'>
                 <el-form-item label="车牌号码：" prop='plateNumber'>
-                    <el-input v-model="examedForm.plateNumber" placeholder="请输入"></el-input>
+                    <el-input v-model="examedForm.plateNumber" placeholder="请输入" clearable></el-input>
                 </el-form-item>
                 
                 <el-form-item>
@@ -67,7 +67,7 @@
                     
                     <el-table-column
                         label="途径路线"
-                        min-width="120"
+                        min-width="140"
                     >
                         <template slot-scope="scope">
                             <p v-if='scope.row.route'>{{scope.row.route}}</p>
@@ -116,7 +116,7 @@
                         min-width="105">
                         <template slot-scope="scope">
                             <div>
-                                <p v-if='scope.row.start_time'>{{scope.row.start_time}}</p>
+                                <p v-if='scope.row.start_time'>{{scope.row.start_time | date-format}}</p>
                                 <p v-else>--</p>
                             </div>
                             
@@ -128,7 +128,7 @@
                         min-width="105">
                         <template slot-scope="scope">
                             <div>
-                                <p v-if='scope.row.end_time'>{{scope.row.end_time}}</p>
+                                <p v-if='scope.row.end_time'>{{scope.row.end_time | date-format}}</p>
                                 <p v-else>--</p>
                             </div>
                             
@@ -140,7 +140,7 @@
                         min-width="105">
                         <template slot-scope="scope">
                             <div>
-                                <p v-if='scope.row.approve_time'>{{scope.row.approve_time}}</p>
+                                <p v-if='scope.row.approve_time'>{{scope.row.approve_time | date-format}}</p>
                                 <p v-else>--</p>
                             </div>
                             
@@ -253,10 +253,7 @@ export default {
             // 根据角色 判断是否显示 机构名称
             orgCodeShow : true,
             examedForm: {
-                titleName: '',
-                // keyWords: '',
-                orgCode:'',
-                fileType:''
+                plateNumber: ''
             },
             pageStart:1,
             pageSize:10,
@@ -268,16 +265,8 @@ export default {
             belongOrg:'',
             multipleSelection:'',
             examedFormRule:{
-                titleName: [
-                    { required: false, message: '请输入文献名称', trigger: 'blur' },
-                ],
-                orgCode: [
-                    { required: false, message: '请选择机构', trigger: 'blur' },
-                    // { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
-                ],
-                fileType: [
-                    { required: false, message: '请选择类型', trigger: 'blur' },
-                    // { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+                plateNumber: [
+                    { required: false, message: '请输入车牌号码', trigger: 'blur' },
                 ]
             },
             // 机构名称下拉数据
@@ -317,7 +306,7 @@ export default {
                 page: this.pageStart,
                 size: this.pageSize,
                 state: 'FINISHED',
-                plate_number: ''
+                plate_number: this.examedForm.plateNumber
             }).then((response) =>{
                     console.log(response)
                     
