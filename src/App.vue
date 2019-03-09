@@ -15,9 +15,13 @@
 						:default-openeds="openeds"
                         text-color="#fff"
 						background-color="#545c64"
-                        active-text-color="#ffd04b"
+                        active-text-color="#409EFF"
                         :collapse = isCollapse
 					>
+                        <div  class="container-logo">
+                            <img :src="logoImg" alt="安阳交警管理平台">
+                            <span v-show='!isCollapse'>安阳交警管理平台</span>
+                        </div>
 						<template v-for="(item,index) in $router.options.routes" v-if="!item.hidden">
 							<el-submenu :index="index+''" :key="index" v-if="item.isPull">
 								<template slot="title"><i :class="item.iconCls + ' iconfont'"></i>{{item.name}}</template>
@@ -52,7 +56,10 @@
                     <el-header class="app-header">
                        <i class="el-icon-menu collapse-icon" @click="toggleMenu"></i>
                     </el-header>
-                    <router-view/>
+                    <div class="app-main">
+                        <router-view/>
+                    </div>
+                    
                 </el-main>
 			</el-container>
 		</el-container>
@@ -67,6 +74,7 @@
 
 <script>
 import '@/assets/icon/iconfont.css'
+import logoImg from '@/assets/images/coin.png'
 export default {
     name: 'App',
     data () {
@@ -74,7 +82,8 @@ export default {
             // 默认打开的左侧菜单
 			openeds: [],
             path: 'default',
-            isCollapse: false
+            isCollapse: false,
+            logoImg: logoImg
         }
 	},
 	updated : function(){
@@ -123,10 +132,29 @@ export default {
 }
 .app-header{
     line-height: 60px;
-    background: #F7F9F2;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+}
+.app-main{
+    // padding: 20px;
 }
 .el-main{
     padding : 0px;
+}
+.container-aside{
+    color: #fff;
+    font-size: 16px;
+    text-align: center;
+    img{
+        display: inline-block;
+        width: 20px;
+        vertical-align: middle;
+        position: relative;
+        top: -4px;
+    }
+    .container-logo{
+        height: 60px;
+        line-height: 60px;
+    }
 }
 .el-menu-vertical-demo {
     .is-active{

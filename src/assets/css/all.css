@@ -28,3 +28,10 @@ p{word-wrap:break-word}
 .clearfix {
     *zoom: 1;
 }
+/* 面包屑 */
+.breadcrumb-wrapper{
+    background: #f1f1f1;
+    height: 50px;
+    line-height:50px;
+    padding: 0 20px;
+}

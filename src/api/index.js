@@ -4,6 +4,9 @@ import http from './http'
 export default{
     authLogin(param,callbak) {
         return http.post(`${baseUrl}/v1.0/auth/login`, param, callbak)
+    },
+    examApply(param,callbak) {
+        return http.get(`{baseUrl}/v1.0/management/permitsv1.0/auth/login`, param, callbak)
     }
 }
 
