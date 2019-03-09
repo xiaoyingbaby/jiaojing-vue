@@ -41,6 +41,7 @@
 
 <script>
 import Api  from '../../api/index.js';
+import localDb from '../../util/localDb.js'
 export default {
 	name: 'HelloWorld',
 	data () {
@@ -114,25 +115,7 @@ export default {
 				// 通过校验
 				if(valid){
 					this.disabled = true;
-					// ajax({
-					// 	url : '/font/login',
-					// 	data : {
-					// 		userName : this.loginForm.userName.trim(),
-					// 		password : this.loginForm.passWord.trim()
-					// 	},
-					// 	success : (data) => {
-					// 		this.disabled = false;
-					// 		if(data.success){
-					// 			// 登录成功 执行回调
-					// 			this.$emit("confirm");
-					// 		}else{
-					// 			this.$message.error(data.errorMsg);
-					// 		}
-					// 	},
-					// 	error : () => {
-					// 		this.disabled = false;
-					// 	}
-					// });
+
 					const {userName, passWord,remember_me} = this.loginForm;
 					let _remember_me = 0;
 					if(remember_me){
@@ -148,7 +131,8 @@ export default {
 					.then((response) =>{
 						this.disabled = false;
 						if(response && response.status === 200){
-							this.$router.push({name: "unexam"});
+							// console.log(response)
+							this.$router.push({path: "/unexam"});
 						}else{
 
 						}

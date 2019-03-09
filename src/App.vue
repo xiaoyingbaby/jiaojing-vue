@@ -143,17 +143,19 @@ export default {
 .container-aside{
     color: #fff;
     font-size: 16px;
-    text-align: center;
+    
     img{
         display: inline-block;
         width: 20px;
         vertical-align: middle;
         position: relative;
         top: -4px;
+        margin-right: 2px;
     }
     .container-logo{
         height: 60px;
         line-height: 60px;
+        text-align: center;
     }
 }
 .el-menu-vertical-demo {

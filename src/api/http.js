@@ -20,8 +20,9 @@ function isLogin() {
 
 //添加请求拦截器
 service.interceptors.request.use(function(config){
-    if(store.getters.token){
-        config.headers['TOKEN'] = getCookie('TOKEN')
+    console.log(localDb.get('TOKEN'),'dddd')
+    if(localDb.get('TOKEN')){
+        config.headers['x-auth-token'] = localDb.get('TOKEN')
     }
     return config
 },function(error){
@@ -51,6 +52,12 @@ service.interceptors.response.use(function(response){
    //     return response.data
    //   }
    // },
+
+    if(response && response.headers && response['headers']['x-auth-token']){
+        localDb.set('TOKEN',response['headers']['x-auth-token'])
+    }
+  
+    console.log(response)
         return response
     },function(error){
         console.log('err',error)
@@ -90,7 +97,7 @@ class Http {
             method: 'GET'
         }
         console.log(params,'sss')
-        if (params) options.body = JSON.stringify(params)
+        if (params) options.body = params
         return this.request(url, options, callback)
     }
 

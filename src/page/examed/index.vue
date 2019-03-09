@@ -5,7 +5,9 @@
 <template>
     <div  v-loading="loading" element-loading-text="删除中">
         <div class="breadcrumb-wrapper">
-            <el-breadcrumb-item>审批日志</el-breadcrumb-item>
+            <el-breadcrumb separator="/">
+                <el-breadcrumb-item>审批日志</el-breadcrumb-item>
+            </el-breadcrumb>
         </div>
 
         <div class="examed">
