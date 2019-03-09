@@ -4,6 +4,7 @@ import Unexam from '@/page/unexam'
 import Examed from '@/page/examed'
 import Export from '@/page/export'
 import Login from '@/page/login'
+import Detail from '@/page/details'
 
 Vue.use(Router)
 
@@ -35,6 +36,12 @@ const router =  new Router({
 			name: '导出日志',
 			icon: 'icondaochu',
 			component: Export
+		},
+		{
+			path: '/details',
+			name: '查看审批详情',
+			component: Detail,
+			hidden: true
 		}
 	]
 })

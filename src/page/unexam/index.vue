@@ -1,415 +1,211 @@
-<!-- 
-    author:amin,
-    desc:审批
- -->
 <template>
-    <div  v-loading="loading" element-loading-text="删除中">
-        <div class="breadcrumb-wrapper">
-            <el-breadcrumb-item>审批日志</el-breadcrumb-item>
+  <div class="unexam">
+        <div class="header breadcrumb-wrapper">
+            <h3 class="title">通行证审批</h3>
+            <el-breadcrumb separator-class="el-icon-arrow-right">
+                <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+                <el-breadcrumb-item>通行证审批</el-breadcrumb-item>
+            </el-breadcrumb>
         </div>
-
-        <div class="examed">
-            <!-- <el-form :inline="true" :model="totalSearchForm" class="demo-form-inline" empty-text="暂无数据" :rules='totalSearchFormRule' ref='totalSearchForm'>
-                <el-form-item label="文献名：" prop='titleName'>
-                    <el-input v-model="totalSearchForm.titleName" placeholder="请输入"></el-input>
-                </el-form-item>
-                    <el-form-item label="机构名称：" prop='orgCode' v-if="orgCodeShow">
-                    <el-select v-model="totalSearchForm.orgCode" placeholder="请选择" :clearable='true' class='w192'>
-                        <el-option  :label="item.title" :value="item.key" :key='item.key' v-for='(item,index) in orgData'></el-option>
+        <div class="main">
+            <div class="conditions">
+                <!-- <div class="demo-input-suffix">
+                    <span>车牌号码：</span><el-input v-model="plate_number" placeholder="请输入内容"></el-input>
+                </div>
+                <div class="demo-input-suffix">
+                    <span>通行证状态：</span>
+                    <el-select v-model="value" placeholder="请选择">
+                        <el-option
+                        v-for="item in options"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                        </el-option>
                     </el-select>
+                </div> -->
+                <el-form :inline="true" :model="formInline" class="demo-form-inline">
+                    <el-form-item label="车牌号码">
+                        <el-input v-model="formInline.number" placeholder="车牌号码"></el-input>
                     </el-form-item>
-                <el-form-item label="类型：" prop='fileType'>
-                    <el-select v-model="totalSearchForm.fileType" placeholder="请选择" :clearable=true class='w192'>
-                        <el-option label="图书" value="ts"></el-option>
-                        <el-option label="档案" value="zb"></el-option>
-                        <el-option label="期刊" value="qk"></el-option>
-                        <el-option label="报纸" value="bz"></el-option>
-                        <el-option label="线装" value="kb"></el-option>
-                        <el-option label="视频" value="sp"></el-option>
-                        <el-option label="音频" value="yp"></el-option>
-                        <el-option label="图片" value="tp"></el-option>
-                        <el-option label="舆图" value="yt"></el-option>
-                    </el-select>
-                </el-form-item><el-form-item>
-                    <el-button type="primary" @click="onSubmit">查询</el-button>
-                    <el-button  class='el-button-reset' @click="onCancel">重置</el-button>
-                    <el-button  class='el-button-reset' @click="onExport">导出</el-button>
-                </el-form-item>
-            </el-form> -->
+                    <el-form-item label="通行证状态">
+                        <el-select v-model="formInline.state" placeholder="未审批">
+                            <el-option label="未审批" value="APPLYING"></el-option>
+                            <el-option label="已审批" value="FINISHED"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" @click="onSubmit">查询</el-button>
+                    </el-form-item>
+                </el-form>
+            </div>
+            <div class="resultList">
+                <el-table
+                    :data="tableData"
+                    border
+                    style="width: 100%">
+                    <el-table-column
+                        prop="id"
+                        label="ID"
+                        >
+                    </el-table-column>
+                    <el-table-column
+                        prop="from"
+                        label="出发地"
+                        >
+                    </el-table-column>
+                    <el-table-column
+                        prop="arrivals"
+                        label="目的地">
+                    </el-table-column>
+                    <el-table-column
+                        prop="route"
+                        label="途经路线">
+                    </el-table-column>
+                    <el-table-column
+                        prop="goods"
+                        label="运输物品">
+                    </el-table-column>
+                    <el-table-column
+                        prop="name"
+                        label="车辆所有人">
+                    </el-table-column>
+                    <el-table-column
+                        prop="phone"
+                        label="手机号">
+                    </el-table-column>
+                    <el-table-column
+                        prop="plate_number"
+                        label="车牌号码">
+                    </el-table-column>
+                    <el-table-column
+                        prop="start_time"
+                        label="途经时间起">
+                    </el-table-column>
+                    <el-table-column
+                        prop="end_time"
+                        label="途经时间止">
+                    </el-table-column>
+                    <el-table-column
+                        prop="limit_time"
+                        label="申请时间">
+                    </el-table-column>
+                    <el-table-column
+                        prop="address"
+                        label="操作">
+                    </el-table-column>
+                </el-table>
+            </div>
+            <div class="paging-wrapper" v-if='tableData.length!==0'>
+                <el-pagination
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :current-page="pageStart"
+                :page-sizes="[10, 20, 50]"
+                :page-size="pageSize"
+                layout="total, sizes, prev, pager, next, jumper"
+                :total="totalNum">
+                </el-pagination>
+            </div>
         </div>
-        <div>
-            <el-table
-                :data="tableData"
-                style="width: 100%"
-              >
-                <el-table-column
-                    label="ID"
-                    min-width="160"
-                    >
-                    <template scope="scope" v-if='scope'>
-                        <p  v-if='scope.row.titleName' :title="scope.row.titleName">{{scope.row.titleName}}</p>
-                        <p v-else>--</p>
-                    </template>
-                </el-table-column>
-                <el-table-column
-                    label="通行证编号"
-                    min-width="90">
-                    <template scope="scope">
-                        <p v-if='scope.row.fileTypeStr'>{{scope.row.fileTypeStr}}</p>
-                        <p v-else>--</p>
-                    </template>
-                </el-table-column>
-                <el-table-column
-                    v-if="orgCodeShow"
-                    label="出发地"
-                    width="130">
-                    <template scope="scope">
-                        <p v-if='scope.row.orgName' class="ellipsis" :title="scope.row.orgName">{{scope.row.orgName}}</p>
-                        <p v-else>--</p>
-                    </template>
-                </el-table-column>
-                <el-table-column
-                    label="主要责任者"
-                    min-width="110">
-                    <template scope="scope">
-                        <p v-if='scope.row.firstResponsible'>{{scope.row.firstResponsible}}</p>
-                        <p v-else>--</p>
-                    </template>
-                </el-table-column>
-                
-                <el-table-column
-                    label="语种"
-                    min-width="80"
-                >
-                    <template scope="scope">
-                        <p v-if='scope.row.language'>{{scope.row.language}}</p>
-                        <p v-else>--</p>
-                    </template>
-                </el-table-column>
-                <el-table-column
-                    prop="gmtCreateStr"
-                    label="创建日期"
-                    min-width="105">
-                    <template scope="scope">
-                        <div>
-                            <p class="no-word-break">{{scope.row.gmtCreateStr.split(" ")[0]}}</p>
-                            <p class="no-word-break">{{scope.row.gmtCreateStr.split(" ")[1]}}</p>
-                        </div>
-                        
-                    </template>
-                </el-table-column>
-                <el-table-column
-                    prop="gmtCreator"
-                    label="创建人"
-                    min-width="90">
-                </el-table-column>
-                <el-table-column 
-                    label="操作"
-                    min-width='135'
-                >
-                    <template scope="scope">
-                        
-                        <a href="javascript:;" 
-                            size="small"
-                            @click="handleEdit(scope.$index, scope.row)" v-if='scope.row.modifyButton' class="table-action">修订</a>
-                        <router-link :to='{path:"/detail",query:{type:"totalLib",fileCode:scope.row.fileCode,fileType:scope.row.fileType}}'
-                         class="table-action">查看</router-link>
-                        <a href="javascript:;"
-                            size="small"
-                            type="danger"
-                            @click="handleDelete(scope.$index, scope.row)" v-if='scope.row.modifyButton' class="table-action">删除</a>
-                    </template>
-                </el-table-column>
-            </el-table>
-        </div>
-        <div class="paging-wrapper" v-if='tableData.length!==0'>
-            <el-pagination
-              @size-change="handleSizeChange"
-              @current-change="handleCurrentChange"
-              :current-page="pageStart"
-              :page-sizes="[10, 20, 50]"
-              :page-size="pageSize"
-              layout="total, sizes, prev, pager, next, jumper"
-              :total="totalNum">
-            </el-pagination>
-        </div>
-    </div>
+  </div>
 </template>
-
-<style lang="less" scoped>
-@theme-color:#409EFF;
-.examed{
-    padding: 20px;
-}
-.btns-wrapper{
-    padding-bottom: 15px;
-}
-.paging-wrapper{
-    padding-top: 15px;
-    text-align: right;
-}
-.table-action{
-    word-break: keep-all
-}
-.w192{
-    width: 192px;
-}
-</style>
 
 <script>
 import Api  from '../../api/index.js';
+import { mapState } from "vuex";
 export default {
-    created : function(){
-        let self = this;
-        // 判断当前角色
-        // ajax({
-        //     url:'/user/getInitInfo',
-        //     type:'post',
-        //     data:{
-        //     },
-        //     success(res){
-        //         if(res.success){
-        //             // self.isProfessor = res.data.userVO.isProfessor;
-        //             self.orgCodeShow = res.data.userVO.isProfessor;
-        //             self.belongOrg = res.data.userVO.orgCode;
-        //         }else{
-        //             self.$message({
-        //                 message: res.errorMsg,
-        //                 type: 'warning'
-        //             });
-        //         };
-        //     }
-            
-        // });
-        // 获取列表数据
-        // this.getListData();
-        // 获取机构列表
-        // this.getOrg();
-    },
-    mounted : function(){
-        // this.getListData();
-    },
-    // beforeRouteLeave : function(to, from, next){
-        
-    // },
-    data(){
-        return ({
-            loading : false,
-            // 根据角色 判断是否显示 机构名称
-            orgCodeShow : true,
-            totalSearchForm: {
-                titleName: '',
-                // keyWords: '',
-                orgCode:'',
-                fileType:''
-            },
-            pageStart:1,
-            pageSize:10,
-            totalNum:0,
-            tableData: [],
-            // 是否是教授
-            isProfessor:false,
-            // 所属机构
-            belongOrg:'',
-            multipleSelection:'',
-            totalSearchFormRule:{
-                titleName: [
-                    { required: false, message: '请输入文献名称', trigger: 'blur' },
-                ],
-                orgCode: [
-                    { required: false, message: '请选择机构', trigger: 'blur' },
-                    // { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
-                ],
-                fileType: [
-                    { required: false, message: '请选择类型', trigger: 'blur' },
-                    // { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
-                ]
-            },
-            // 机构名称下拉数据
-            orgData:[]
-
-        })
-    },
-    methods : {
-        getListData(){
-            // 点击查询
-            let self = this;
-            // ajax({
-            //     url:'/literature/getLiteraturePollListByCond',
-            //     type:'post',
-            //     data:{
-            //         titleName:self.totalSearchForm.titleName,
-            //         orgCode:self.totalSearchForm.orgCode,
-            //         // keyWords:self.totalSearchForm.keyWords,
-            //         fileType:self.totalSearchForm.fileType,
-            //         pageStart:(self.pageStart-1)*self.pageSize,
-            //         pageSize:self.pageSize 
-            //     },
-            //     success(res){
-            //         if(res.success){
-            //             self.tableData = res.rows;
-            //             self.totalNum = res.results;
-            //         }else{
-            //             self.$message({
-            //                 message: res.errorMsg,
-            //                 type: 'warning'
-            //             });
-            //         };
-            //     }
-                
-            // });
-            Api.examList({
-                page: 1,
-                size: 10,
-                state: 'FINISHED',
-                plate_number: ''
-            }).then((response) =>{
-                    console.log(response)
-                    
-                    
-                })
-                .catch(function (error) {
-                    this.disabled = false;
-                });
-        },
-        getOrg(){
-            let self = this;
-            // 获取组织机构下拉列表
-            // ajax({
-            //     url:'/org/getALLOrgList',
-            //     type:'post',
-            //     data:{
-            //     },
-            //     success(res){
-            //         if(res.success){
-            //             res.rows.forEach((val,ind,arr) => {
-            //                 self.orgData.push({'title':val.orgName,'key':val.orgCode});
-            //             });
-                        
-            //         }else{
-            //             self.$message({
-            //                 message: res.errorMsg,
-            //                 type: 'warning'
-            //             });
-            //         };
-            //     }
-                
-            // });
-        },
-        handleSizeChange(value){
-            // pageSize变化
-            this.pageSize = value;
-            this.getListData();
-        },
-        handleCurrentChange(value){
-            // pageStart变化
-            this.pageStart = value;
-            this.getListData();
-        },
-        handleDelete(index,row){
-            let self = this;
-            // 点击删除确定
-            this.$confirm('是否删除该文献?', '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-            }).then(() => {
-                self.loading = true;
-                // ajax({
-                //     url:'/literature/deleteLiterature',
-                //     type:'post',
-                //     data:{
-                //         fileCode:row.fileCode
-                //     },
-                //     success(res){
-                //         self.loading = false;
-                //         if(res.success){
-                //             self.getListData();
-                //             self.$message({
-                //                 message: "删除成功",
-                //                 type: 'success'
-                //             });
-                //         }else{
-                //             self.$message({
-                //                 message: res.errorMsg,
-                //                 type: 'warning'
-                //             });
-                //         };
-                //     }
-                    
-                // });
-            }).catch(() => {
-                // this.$message({
-                //     type: 'info',
-                //     message: '已取消删除'
-                // });          
-            });
-        },
-        onSubmit (){
-            this.pageStart = 1;
-            this.getListData();
-        },
-        onCancel(){
-            // 重置：
-            this.$refs['totalSearchForm'].resetFields();
-
-        },
-        handleEdit(index,row){
-            // 修订
-        
-            // 修改路径
-            let url = '';
-            if(row.fileType == 'ts'){//图书
-                url = '/editBook';
-            }else if(row.fileType == 'zb'){//档案
-                url = '/editRecord';
-            }else if(row.fileType == 'qk'){//期刊
-                url = '/editPeriodical';
-            }else if(row.fileType == 'bz'){//报纸
-                url = '/editSpaper';
-            }else if(row.fileType == 'kb'){//线装
-                url = '/editAncient';
-            }else if(row.fileType == 'sp'){//视频
-                url = '/editVideo';
-            }else if(row.fileType == 'yp'){//音频
-                url = '/editAudio';
-            }else if(row.fileType == 'tp'){//图片
-                url = '/editImg';
-            }else if(row.fileType == 'yt'){//舆图
-                url = '/editYutu';
-            }else{
-
-            };
-            let query = {
-                fileType : row.fileType,
-                fileCode : row.fileCode,
-                type : 'totalLib'
-            };
-            this.$router.push({
-                path : url,
-                query : query
-            });
-        },
-        onExport(){
-            // 导出
-            const self = this;
-
-            if(!this.totalSearchForm.orgCode && this.isProfessor){
-                this.$message({
-                    message: '请选择机构',
-                    type: 'warning'
-                });
-            }else{
-                let orgCode = '';
-                // 所属机构处理
-                if(this.isProfessor){
-                    orgCode = this.totalSearchForm.orgCode;
-                }else{
-                    orgCode = this.belongOrg;
-                };
-                window.open(`/literature/exportBookInfoByOrg?titleName=${self.totalSearchForm.titleName}&orgCode=${orgCode}&fileType=${self.totalSearchForm.fileType}`);
-            };
+  name: "unexam",
+  components: {},
+  data() {
+    return {
+        tableData: [],
+        page: "1",
+        size: "10",
+        state: "APPLYING",
+        plate_number: "",
+        value: "",
+        formInline: {
+          number: '',
+          state: ''
         }
-    }
-}
+    };
+  },
+  props: {},
+  methods: {
+        getData(){
+            this.$store.dispatch("fetchPermitsList", {
+                page: this.page,
+                size: this.size,
+                state: this.formInline.state,
+                plate_number: this.formInline.number,
+            });
+        },
+        onSubmit(){
+            this.getData();
+        }
+  },
+  computed: {
+      ...mapState({
+          //通行证列表
+          permitsList: store => {
+            return store.managementPermits.setPermitsList.permits;
+        },
+      })
+  },
+  beforeCreate() {},
+  created() {},
+  updated() {},
+  beforeUpdate() {},
+  beforeMount() {},
+  mounted() {
+        // let params = {
+        //     "page": this.page,
+        //     "size": this.size,
+        //     "state": "APPLYING",
+        //     "plate_number": this.formInline.number,
+        // }
+        // Api.managementPermits(params)
+        // .then((response) =>{
+        //     if(response && response.status === 200){
+        //         console.log(response)
+        //         this.tableData = response.permits;
+        //     }else{
+
+        //     }            
+        // })
+        // .catch(function (error) {
+        // });
+        this.$store.dispatch("fetchPermitsList", {
+            page: this.page,
+            size: this.size,
+            state: "APPLYING",
+            plate_number: this.formInline.number,
+        });
+  },
+  destroyed() {},
+  beforeDestroy() {}
+};
 </script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style lang='less' scoped>
+.main{
+    padding: 15px;
+}
+.header .title{
+    float: left;
+    font-size: 18px;
+    font-weight: normal;
+}
+.el-breadcrumb{
+    float: right;
+}
+.demo-input-suffix{
+    display: inline-block;
+    margin:0 10px 10px 0; 
+    font-weight: normal;
+}
+.demo-input-suffix .el-input{
+    width:180px;
+}
+</style>

@@ -1,5 +1,6 @@
 import Vue from 'vue';
-import Vuex from 'vuex'
+import Vuex from 'vuex';
+import managementPermits from "./modules/managementPermits";
 Vue.use(Vuex);
 const store = new Vuex.Store({
     state:{
@@ -49,6 +50,9 @@ const store = new Vuex.Store({
             //         }
             //     });
         }
+    },
+    modules: {
+        managementPermits,  //通行证审批
     }
 });
 export default store;
