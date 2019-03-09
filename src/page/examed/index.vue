@@ -187,7 +187,7 @@ export default {
         this.getOrg();
     },
     mounted : function(){
-    
+        this.getListData();
     },
     // beforeRouteLeave : function(to, from, next){
         
@@ -234,30 +234,43 @@ export default {
         getListData(){
             // 点击查询
             let self = this;
-            ajax({
-                url:'/literature/getLiteraturePollListByCond',
-                type:'post',
-                data:{
-                    titleName:self.totalSearchForm.titleName,
-                    orgCode:self.totalSearchForm.orgCode,
-                    // keyWords:self.totalSearchForm.keyWords,
-                    fileType:self.totalSearchForm.fileType,
-                    pageStart:(self.pageStart-1)*self.pageSize,
-                    pageSize:self.pageSize 
-                },
-                success(res){
-                    if(res.success){
-                        self.tableData = res.rows;
-                        self.totalNum = res.results;
-                    }else{
-                        self.$message({
-                            message: res.errorMsg,
-                            type: 'warning'
-                        });
-                    };
-                }
+            // ajax({
+            //     url:'/literature/getLiteraturePollListByCond',
+            //     type:'post',
+            //     data:{
+            //         titleName:self.totalSearchForm.titleName,
+            //         orgCode:self.totalSearchForm.orgCode,
+            //         // keyWords:self.totalSearchForm.keyWords,
+            //         fileType:self.totalSearchForm.fileType,
+            //         pageStart:(self.pageStart-1)*self.pageSize,
+            //         pageSize:self.pageSize 
+            //     },
+            //     success(res){
+            //         if(res.success){
+            //             self.tableData = res.rows;
+            //             self.totalNum = res.results;
+            //         }else{
+            //             self.$message({
+            //                 message: res.errorMsg,
+            //                 type: 'warning'
+            //             });
+            //         };
+            //     }
                 
-            });
+            // });
+            Api.examList({
+                page: 1,
+                size: 10,
+                state: 'FINISHED',
+                plate_number: ''
+            }).then((response) =>{
+                    console.log(response);
+                    
+                    
+                })
+                .catch(function (error) {
+                    this.disabled = false;
+                });
         },
         getOrg(){
             let self = this;

@@ -86,11 +86,12 @@ class Http {
     /* eslint-disable */
     get(url, params, callback) { // GET请求
         // const newUrl = params ? this.build(url, params) : url
-        if (body) options.body = JSON.stringify(body)
-        return this.request(url, {
-            method: 'GET',
-            body: params
-        }, callback)
+        let options = {
+            method: 'GET'
+        }
+        console.log(params,'sss')
+        if (params) options.body = JSON.stringify(params)
+        return this.request(url, options, callback)
     }
 
     post(url, body, callback) { // POST请求
