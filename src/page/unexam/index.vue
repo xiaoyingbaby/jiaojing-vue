@@ -40,7 +40,7 @@
             </div>
             <div class="resultList">
                 <el-table
-                    :data="tableData"
+                    :data="permitsList"
                     border
                     style="width: 100%">
                     <el-table-column
@@ -66,7 +66,7 @@
                         label="运输物品">
                     </el-table-column>
                     <el-table-column
-                        prop="name"
+                        prop="owner"
                         label="车辆所有人">
                     </el-table-column>
                     <el-table-column
@@ -86,11 +86,10 @@
                         label="途经时间止">
                     </el-table-column>
                     <el-table-column
-                        prop="limit_time"
+                        prop="approve_time"
                         label="申请时间">
                     </el-table-column>
                     <el-table-column
-                        prop="address"
                         label="操作">
                     </el-table-column>
                 </el-table>
@@ -148,9 +147,9 @@ export default {
       ...mapState({
           //通行证列表
           permitsList: store => {
-            return store.managementPermits.setPermitsList.permits;
+            return store.managementPermits.permitsList.permits;
         },
-      })
+      }),
   },
   beforeCreate() {},
   created() {},
@@ -178,7 +177,7 @@ export default {
         this.$store.dispatch("fetchPermitsList", {
             page: this.page,
             size: this.size,
-            state: "APPLYING",
+            state: "FINISHED",
             plate_number: this.formInline.number,
         });
   },

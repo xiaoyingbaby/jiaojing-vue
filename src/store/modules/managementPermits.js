@@ -16,7 +16,7 @@ const actions = {
         Api.managementPermits(params)
             .then((response) =>{
                 if(response && response.status === 200){
-                    commit("setPermitsList", response);
+                    commit("setPermitsList", response.data);
                 }else{
 
                 }   

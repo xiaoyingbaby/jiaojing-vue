@@ -46,7 +46,7 @@
                     label="ID"
                     min-width="160"
                     >
-                    <template scope="scope" v-if='scope'>
+                    <template slot-scope="scope" v-if='scope'>
                         <p  v-if='scope.row.titleName' :title="scope.row.titleName">{{scope.row.titleName}}</p>
                         <p v-else>--</p>
                     </template>
@@ -54,7 +54,7 @@
                 <el-table-column
                     label="通行证编号"
                     min-width="90">
-                    <template scope="scope">
+                    <template slot-scope="scope">
                         <p v-if='scope.row.fileTypeStr'>{{scope.row.fileTypeStr}}</p>
                         <p v-else>--</p>
                     </template>
@@ -63,7 +63,7 @@
                     v-if="orgCodeShow"
                     label="出发地"
                     width="130">
-                    <template scope="scope">
+                    <template slot-scope="scope">
                         <p v-if='scope.row.orgName' class="ellipsis" :title="scope.row.orgName">{{scope.row.orgName}}</p>
                         <p v-else>--</p>
                     </template>
@@ -71,7 +71,7 @@
                 <el-table-column
                     label="主要责任者"
                     min-width="110">
-                    <template scope="scope">
+                    <template slot-scope="scope">
                         <p v-if='scope.row.firstResponsible'>{{scope.row.firstResponsible}}</p>
                         <p v-else>--</p>
                     </template>
@@ -81,7 +81,7 @@
                     label="语种"
                     min-width="80"
                 >
-                    <template scope="scope">
+                    <template slot-scope="scope">
                         <p v-if='scope.row.language'>{{scope.row.language}}</p>
                         <p v-else>--</p>
                     </template>
@@ -90,7 +90,7 @@
                     prop="gmtCreateStr"
                     label="创建日期"
                     min-width="105">
-                    <template scope="scope">
+                    <template slot-scope="scope">
                         <div>
                             <p class="no-word-break">{{scope.row.gmtCreateStr.split(" ")[0]}}</p>
                             <p class="no-word-break">{{scope.row.gmtCreateStr.split(" ")[1]}}</p>
@@ -107,7 +107,7 @@
                     label="操作"
                     min-width='135'
                 >
-                    <template scope="scope">
+                    <template slot-scope="scope">
                         
                         <a href="javascript:;" 
                             size="small"
