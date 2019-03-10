@@ -1,144 +1,203 @@
 <!-- 
     author:amin,
-    desc:审批
+    desc:导出批复日志
  -->
 <template>
     <div  v-loading="loading" element-loading-text="删除中">
-        <div class="breadcrumb-wrapper">
-            <el-breadcrumb-item>审批日志</el-breadcrumb-item>
+        <div class="breadcrumb-wrapper header">
+            <h3 class="title">导出批复日志</h3>
+            <el-breadcrumb separator-class="el-icon-arrow-right">
+                <el-breadcrumb-item>首页</el-breadcrumb-item>
+                <el-breadcrumb-item>导出批复日志</el-breadcrumb-item>
+            </el-breadcrumb>
         </div>
 
-        <div class="examed">
-            <!-- <el-form :inline="true" :model="totalSearchForm" class="demo-form-inline" empty-text="暂无数据" :rules='totalSearchFormRule' ref='totalSearchForm'>
-                <el-form-item label="文献名：" prop='titleName'>
-                    <el-input v-model="totalSearchForm.titleName" placeholder="请输入"></el-input>
+        <div class="export">
+             <el-form :inline="true" :model="exportForm" class="demo-form-inline" empty-text="暂无数据" :rules='exportFormRule' ref='exportForm'>
+                <el-form-item label="车牌号码：" prop='plateNumber'>
+                    <el-input v-model="exportForm.plateNumber" placeholder="请输入" clearable></el-input>
                 </el-form-item>
-                    <el-form-item label="机构名称：" prop='orgCode' v-if="orgCodeShow">
-                    <el-select v-model="totalSearchForm.orgCode" placeholder="请选择" :clearable='true' class='w192'>
-                        <el-option  :label="item.title" :value="item.key" :key='item.key' v-for='(item,index) in orgData'></el-option>
-                    </el-select>
-                    </el-form-item>
-                <el-form-item label="类型：" prop='fileType'>
-                    <el-select v-model="totalSearchForm.fileType" placeholder="请选择" :clearable=true class='w192'>
-                        <el-option label="图书" value="ts"></el-option>
-                        <el-option label="档案" value="zb"></el-option>
-                        <el-option label="期刊" value="qk"></el-option>
-                        <el-option label="报纸" value="bz"></el-option>
-                        <el-option label="线装" value="kb"></el-option>
-                        <el-option label="视频" value="sp"></el-option>
-                        <el-option label="音频" value="yp"></el-option>
-                        <el-option label="图片" value="tp"></el-option>
-                        <el-option label="舆图" value="yt"></el-option>
-                    </el-select>
-                </el-form-item><el-form-item>
+                
+                <el-form-item>
                     <el-button type="primary" @click="onSubmit">查询</el-button>
                     <el-button  class='el-button-reset' @click="onCancel">重置</el-button>
-                    <el-button  class='el-button-reset' @click="onExport">导出</el-button>
+                    <!-- <el-button  class='el-button-reset' @click="onExport">导出</el-button> -->
                 </el-form-item>
-            </el-form> -->
-        </div>
-        <div>
-            <el-table
-                :data="tableData"
-                style="width: 100%"
-              >
-                <el-table-column
-                    label="ID"
-                    min-width="160"
+            </el-form>
+        
+            <div>
+                <el-table
+                    :data="tableData"
+                    style="width: 100%"
+                    border
+                >
+                    <el-table-column
+                        label="ID"
+                        min-width="70"
+                        >
+                        <template slot-scope="scope">
+                            <p  v-if='scope.row.id' >{{scope.row.id}}</p>
+                            <p v-else>--</p>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                        label="通行证编号"
+                        min-width="130">
+                        <template slot-scope="scope">
+                            <p v-if='scope.row.driving_license'>{{scope.row.driving_license}}</p>
+                            <p v-else>--</p>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                        v-if="orgCodeShow"
+                        label="出发地"
+                        width="100">
+                        <template slot-scope="scope">
+                            <p v-if='scope.row.from' >{{scope.row.from}}</p>
+                            <!-- <p v-if='scope.row.from' class="ellipsis" :title="scope.row.orgName">{{scope.row.orgName}}</p> -->
+                            <p v-else>--</p>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                        label="目的地"
+                        min-width="100">
+                        <template slot-scope="scope">
+                            <p v-if='scope.row.arrivals'>{{scope.row.arrivals}}</p>
+                            <p v-else>--</p>
+                        </template>
+                    </el-table-column>
+                    
+                    <el-table-column
+                        label="途径路线"
+                        min-width="140"
                     >
-                    <template slot-scope="scope" v-if='scope'>
-                        <p  v-if='scope.row.titleName' :title="scope.row.titleName">{{scope.row.titleName}}</p>
-                        <p v-else>--</p>
-                    </template>
-                </el-table-column>
-                <el-table-column
-                    label="通行证编号"
-                    min-width="90">
-                    <template slot-scope="scope">
-                        <p v-if='scope.row.fileTypeStr'>{{scope.row.fileTypeStr}}</p>
-                        <p v-else>--</p>
-                    </template>
-                </el-table-column>
-                <el-table-column
-                    v-if="orgCodeShow"
-                    label="出发地"
-                    width="130">
-                    <template slot-scope="scope">
-                        <p v-if='scope.row.orgName' class="ellipsis" :title="scope.row.orgName">{{scope.row.orgName}}</p>
-                        <p v-else>--</p>
-                    </template>
-                </el-table-column>
-                <el-table-column
-                    label="主要责任者"
-                    min-width="110">
-                    <template slot-scope="scope">
-                        <p v-if='scope.row.firstResponsible'>{{scope.row.firstResponsible}}</p>
-                        <p v-else>--</p>
-                    </template>
-                </el-table-column>
-                
-                <el-table-column
-                    label="语种"
-                    min-width="80"
-                >
-                    <template slot-scope="scope">
-                        <p v-if='scope.row.language'>{{scope.row.language}}</p>
-                        <p v-else>--</p>
-                    </template>
-                </el-table-column>
-                <el-table-column
-                    prop="gmtCreateStr"
-                    label="创建日期"
-                    min-width="105">
-                    <template slot-scope="scope">
-                        <div>
-                            <p class="no-word-break">{{scope.row.gmtCreateStr.split(" ")[0]}}</p>
-                            <p class="no-word-break">{{scope.row.gmtCreateStr.split(" ")[1]}}</p>
-                        </div>
-                        
-                    </template>
-                </el-table-column>
-                <el-table-column
-                    prop="gmtCreator"
-                    label="创建人"
-                    min-width="90">
-                </el-table-column>
-                <el-table-column 
-                    label="操作"
-                    min-width='135'
-                >
-                    <template slot-scope="scope">
-                        
-                        <a href="javascript:;" 
-                            size="small"
-                            @click="handleEdit(scope.$index, scope.row)" v-if='scope.row.modifyButton' class="table-action">修订</a>
-                        <router-link :to='{path:"/detail",query:{type:"totalLib",fileCode:scope.row.fileCode,fileType:scope.row.fileType}}'
-                         class="table-action">查看</router-link>
-                        <a href="javascript:;"
-                            size="small"
-                            type="danger"
-                            @click="handleDelete(scope.$index, scope.row)" v-if='scope.row.modifyButton' class="table-action">删除</a>
-                    </template>
-                </el-table-column>
-            </el-table>
-        </div>
-        <div class="paging-wrapper" v-if='tableData.length!==0'>
-            <el-pagination
-              @size-change="handleSizeChange"
-              @current-change="handleCurrentChange"
-              :current-page="pageStart"
-              :page-sizes="[10, 20, 50]"
-              :page-size="pageSize"
-              layout="total, sizes, prev, pager, next, jumper"
-              :total="totalNum">
-            </el-pagination>
+                        <template slot-scope="scope">
+                            <p v-if='scope.row.route'>{{scope.row.route}}</p>
+                            <p v-else>--</p>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                        prop="gmtCreateStr"
+                        label="运输物品"
+                        min-width="100">
+                        <template slot-scope="scope">
+                            <div>
+                                <p v-if='scope.row.goods'>{{scope.row.goods}}</p>
+                            <p v-else>--</p>
+                            </div>
+                            
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                        prop="gmtCreateStr"
+                        label="车牌号码"
+                        min-width="100">
+                        <template slot-scope="scope">
+                            <div>
+                                <p v-if='scope.row.plate_number'>{{scope.row.plate_number}}</p>
+                                <p v-else>--</p>
+                            </div>
+                            
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                        prop="gmtCreateStr"
+                        label="审批意见"
+                        min-width="90">
+                        <template slot-scope="scope">
+                            <div>
+                                <p v-if='scope.row.approval_opinion'>{{scope.row.approval_opinion}}</p>
+                                <p v-else>--</p>
+                            </div>
+                            
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                        prop="gmtCreateStr"
+                        label="途径时间起"
+                        min-width="105">
+                        <template slot-scope="scope">
+                            <div>
+                                <p v-if='scope.row.start_time'>{{scope.row.start_time | date-format}}</p>
+                                <p v-else>--</p>
+                            </div>
+                            
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                        prop="gmtCreateStr"
+                        label="途径时间止"
+                        min-width="105">
+                        <template slot-scope="scope">
+                            <div>
+                                <p v-if='scope.row.end_time'>{{scope.row.end_time | date-format}}</p>
+                                <p v-else>--</p>
+                            </div>
+                            
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                        prop="gmtCreateStr"
+                        label="批复时间"
+                        min-width="105">
+                        <template slot-scope="scope">
+                            <div>
+                                <p v-if='scope.row.approve_time'>{{scope.row.approve_time | date-format}}</p>
+                                <p v-else>--</p>
+                            </div>
+                            
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                        prop="gmtCreateStr"
+                        label="审批人"
+                        min-width="105">
+                        <template slot-scope="scope">
+                            <div>
+                                <p v-if='scope.row.approver'>{{scope.row.approver}}</p>
+                                <p v-else>--</p>
+                            </div>
+                            
+                        </template>
+                    </el-table-column>
+                    <el-table-column 
+                        label="操作"
+                        min-width='135'
+                        fixed="right"
+                    >
+                        <template slot-scope="scope">
+                            
+                            <a href="javascript:;" 
+                                size="small"
+                                @click="handleEdit(scope.$index, scope.row)" v-if='scope.row.modifyButton' class="table-action">修订</a>
+                            <router-link :to='{path:"/detail",query:{type:"totalLib",fileCode:scope.row.fileCode,fileType:scope.row.fileType}}'
+                            class="table-action">查看</router-link>
+                            <a href="javascript:;"
+                                size="small"
+                                type="danger"
+                                @click="handleDelete(scope.$index, scope.row)" v-if='scope.row.modifyButton' class="table-action">删除</a>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </div>
+            <div class="paging-wrapper" v-if='tableData.length!==0'>
+                <el-pagination
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :current-page="pageStart"
+                :page-sizes="[10, 20, 50]"
+                :page-size="pageSize"
+                layout="total, sizes, prev, pager, next, jumper"
+                :total="totalNum">
+                </el-pagination>
+            </div>
         </div>
     </div>
 </template>
 
 <style lang="less" scoped>
 @theme-color:#409EFF;
-.examed{
+.export{
     padding: 20px;
 }
 .btns-wrapper{
@@ -153,6 +212,14 @@
 }
 .w192{
     width: 192px;
+}
+.el-breadcrumb{
+    float: right;
+}
+.header .title{
+    float: left;
+    font-size: 18px;
+    font-weight: normal;
 }
 </style>
 
@@ -181,13 +248,11 @@ export default {
         //     }
             
         // });
-        // 获取列表数据
-        // this.getListData();
         // 获取机构列表
         // this.getOrg();
     },
     mounted : function(){
-        // this.getListData();
+        this.getListData();
     },
     // beforeRouteLeave : function(to, from, next){
         
@@ -197,11 +262,8 @@ export default {
             loading : false,
             // 根据角色 判断是否显示 机构名称
             orgCodeShow : true,
-            totalSearchForm: {
-                titleName: '',
-                // keyWords: '',
-                orgCode:'',
-                fileType:''
+            exportForm: {
+                plateNumber: ''
             },
             pageStart:1,
             pageSize:10,
@@ -212,17 +274,9 @@ export default {
             // 所属机构
             belongOrg:'',
             multipleSelection:'',
-            totalSearchFormRule:{
-                titleName: [
-                    { required: false, message: '请输入文献名称', trigger: 'blur' },
-                ],
-                orgCode: [
-                    { required: false, message: '请选择机构', trigger: 'blur' },
-                    // { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
-                ],
-                fileType: [
-                    { required: false, message: '请选择类型', trigger: 'blur' },
-                    // { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+            exportFormRule:{
+                plateNumber: [
+                    { required: false, message: '请输入车牌号码', trigger: 'blur' },
                 ]
             },
             // 机构名称下拉数据
@@ -238,10 +292,10 @@ export default {
             //     url:'/literature/getLiteraturePollListByCond',
             //     type:'post',
             //     data:{
-            //         titleName:self.totalSearchForm.titleName,
-            //         orgCode:self.totalSearchForm.orgCode,
-            //         // keyWords:self.totalSearchForm.keyWords,
-            //         fileType:self.totalSearchForm.fileType,
+            //         titleName:self.exportForm.titleName,
+            //         orgCode:self.exportForm.orgCode,
+            //         // keyWords:self.exportForm.keyWords,
+            //         fileType:self.exportForm.fileType,
             //         pageStart:(self.pageStart-1)*self.pageSize,
             //         pageSize:self.pageSize 
             //     },
@@ -259,14 +313,17 @@ export default {
                 
             // });
             Api.examList({
-                page: 1,
-                size: 10,
+                page: this.pageStart,
+                size: this.pageSize,
                 state: 'FINISHED',
-                plate_number: ''
+                plate_number: this.exportForm.plateNumber
             }).then((response) =>{
                     console.log(response)
                     
-                    
+                    if(response && response.status === 200){
+                        this.tableData = response.data.permits;
+                        this.totalNum = response.data.total;
+                    }
                 })
                 .catch(function (error) {
                     this.disabled = false;
@@ -351,7 +408,7 @@ export default {
         },
         onCancel(){
             // 重置：
-            this.$refs['totalSearchForm'].resetFields();
+            this.$refs['exportForm'].resetFields();
 
         },
         handleEdit(index,row){
@@ -394,7 +451,7 @@ export default {
             // 导出
             const self = this;
 
-            if(!this.totalSearchForm.orgCode && this.isProfessor){
+            if(!this.exportForm.orgCode && this.isProfessor){
                 this.$message({
                     message: '请选择机构',
                     type: 'warning'
@@ -403,11 +460,11 @@ export default {
                 let orgCode = '';
                 // 所属机构处理
                 if(this.isProfessor){
-                    orgCode = this.totalSearchForm.orgCode;
+                    orgCode = this.exportForm.orgCode;
                 }else{
                     orgCode = this.belongOrg;
                 };
-                window.open(`/literature/exportBookInfoByOrg?titleName=${self.totalSearchForm.titleName}&orgCode=${orgCode}&fileType=${self.totalSearchForm.fileType}`);
+                window.open(`/literature/exportBookInfoByOrg?titleName=${self.exportForm.titleName}&orgCode=${orgCode}&fileType=${self.totalSearchForm.fileType}`);
             };
         }
     }

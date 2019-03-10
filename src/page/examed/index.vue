@@ -4,8 +4,10 @@
  -->
 <template>
     <div  v-loading="loading" element-loading-text="删除中">
-        <div class="breadcrumb-wrapper">
-            <el-breadcrumb separator="/">
+        <div class="breadcrumb-wrapper header">
+            <h3 class="title">审批日志</h3>
+            <el-breadcrumb separator-class="el-icon-arrow-right">
+                <el-breadcrumb-item>首页</el-breadcrumb-item>
                 <el-breadcrumb-item>审批日志</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
@@ -40,7 +42,7 @@
                     </el-table-column>
                     <el-table-column
                         label="通行证编号"
-                        min-width="110">
+                        min-width="130">
                         <template slot-scope="scope">
                             <p v-if='scope.row.driving_license'>{{scope.row.driving_license}}</p>
                             <p v-else>--</p>
@@ -210,6 +212,14 @@
 }
 .w192{
     width: 192px;
+}
+.el-breadcrumb{
+    float: right;
+}
+.header .title{
+    float: left;
+    font-size: 18px;
+    font-weight: normal;
 }
 </style>
 

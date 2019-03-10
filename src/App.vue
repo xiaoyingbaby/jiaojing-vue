@@ -87,11 +87,10 @@ export default {
         }
 	},
 	updated : function(){
-		console.log(1111)
 		/* 判断显示的组件 */
 		let path = this.$route.path;
-		
-		if(path === '/login'){
+		console.log(path,'path')
+		if(path === '/login' || path === '/'){
 			this.path = 'login';
 		}else if(path === '/sign'){
 			this.path = 'sign';
