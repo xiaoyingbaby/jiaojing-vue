@@ -54,7 +54,8 @@
 				</div>
 				<el-main class="container-main">
                     <el-header class="app-header">
-                       <i class="el-icon-menu collapse-icon" @click="toggleMenu"></i>
+                       <i class="iconindent collapse-icon iconfont" @click="toggleMenu" v-show="isCollapse"></i>
+                       <i class="iconoutdent collapse-icon iconfont" @click="toggleMenu" v-show="!isCollapse"></i>
                     </el-header>
                     <div class="app-main">
                         <router-view/>
@@ -124,6 +125,7 @@ export default {
 <style lang='less' scoped>
 @theme-color: #409EFF;
 .collapse-icon{
+	font-size: 18px;
     cursor: pointer;
     &:hover{
         color: @theme-color;

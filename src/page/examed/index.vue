@@ -44,7 +44,7 @@
                         label="通行证编号"
                         min-width="130">
                         <template slot-scope="scope">
-                            <p v-if='scope.row.driving_license'>{{scope.row.driving_license}}</p>
+                            <p v-if='scope.row.permit_number'>{{scope.row.permit_number}}</p>
                             <p v-else>--</p>
                         </template>
                     </el-table-column>
