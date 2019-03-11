@@ -38,3 +38,10 @@ p{word-wrap:break-word}
 .breadcrumb-wrapper .el-breadcrumb{
     padding-top: 18px;
 }
+/* table间距调整 */
+.el-table td, .el-table th{
+    padding: 8px 0;   
+}
+.el-table td{
+    font-weight: normal;
+}

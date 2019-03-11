@@ -17,49 +17,64 @@
                         </div>
                         <div class="grid-body">
                             <div class="detailsList">
-                                <el-table
-                                    :data="tableData"
-                                    border
-                                    style="width: 100%">
-                                    <el-table-column
-                                        prop="id"
-                                        label="ID"
-                                        >
-                                    </el-table-column>
-                                    <el-table-column
-                                        prop="from"
-                                        label="出发地"
-                                        >
-                                    </el-table-column>
-                                    <el-table-column
-                                        prop="arrivals"
-                                        label="目的地">
-                                    </el-table-column>
-                                    <el-table-column
-                                        prop="route"
-                                        label="途经路线">
-                                    </el-table-column>
-                                    <el-table-column
-                                        prop="goods"
-                                        label="运输物品">
-                                    </el-table-column>
-                                    <el-table-column
-                                        prop="name"
-                                        label="车辆所有人">
-                                    </el-table-column>
-                                    <el-table-column
-                                        prop="phone"
-                                        label="手机号">
-                                    </el-table-column>
-                                    <el-table-column
-                                        prop="plate_number"
-                                        label="车牌号码">
-                                    </el-table-column>
-                                    <el-table-column
-                                        prop="start_time"
-                                        label="途经时间起">
-                                    </el-table-column>
-                                </el-table>
+                                <table class="el-table el-table--border">
+                                    <tr>
+                                        <th width="30%"><div class="cell">手机号</div></th>
+                                        <td><div class="cell">{{ tableData.phone }}</div></td>
+                                    </tr>
+                                    <tr>
+                                        <th width="30%"><div class="cell">出发地</div></th>
+                                        <td><div class="cell">{{ tableData.from }}</div></td>
+                                    </tr>
+                                    <tr>
+                                        <th width="30%"><div class="cell">目的地</div></th>
+                                        <td><div class="cell">{{ tableData.arrivals }}</div></td>
+                                    </tr>
+                                    <tr>
+                                        <th width="30%"><div class="cell">运输物品</div></th>
+                                        <td><div class="cell">{{ tableData.goods }}</div></td>
+                                    </tr>
+                                    <tr>
+                                        <th width="30%"><div class="cell">车辆所有人</div></th>
+                                        <td><div class="cell">{{ tableData.owner }}</div></td>
+                                    </tr>
+                                    <tr>
+                                        <th width="30%"><div class="cell">车牌号码</div></th>
+                                        <td><div class="cell">{{ tableData.plate_number }}</div></td>
+                                    </tr>
+                                    <tr>
+                                        <th width="30%"><div class="cell">通行证编号</div></th>
+                                        <td><div class="cell">{{ tableData.permit_number }}</div></td>
+                                    </tr>
+                                    <tr>
+                                        <th width="30%"><div class="cell">途经时间起</div></th>
+                                        <td><div class="cell">{{ tableData.start_time | date-format }}</div></td>
+                                    </tr>
+                                    <tr>
+                                        <th width="30%"><div class="cell">途经时间止</div></th>
+                                        <td><div class="cell">{{ tableData.end_time | date-format }}</div></td>
+                                    </tr>
+                                    <tr>
+                                        <th width="30%"><div class="cell">申请时间</div></th>
+                                        <td><div class="cell">{{ tableData.create_time | date-format }}</div></td>
+                                    </tr>
+                                    <tr>
+                                        <th width="30%"><div class="cell">车辆左前方现状图</div></th>
+                                        <td><div class="cell"><img :src="imgUrl(tableData.photo_car_path1)"></div></td>
+                                    </tr>
+                                    <tr>
+                                        <th width="30%"><div class="cell">行驶证正面</div></th>
+                                        <td><div class="cell"><img :src="imgUrl(tableData.photo_vehicle_license_path1)"></div></td>
+                                    </tr>
+                                    <tr>
+                                        <th width="30%"><div class="cell">行驶证反面</div></th>
+                                        <td><div class="cell"><img :src="imgUrl(tableData.photo_vehicle_license_path2)"></div></td>
+                                    </tr>
+                                    <tr>
+                                        <th width="30%"><div class="cell">车辆尾部照片</div></th>
+                                        <td><div class="cell"><img :src="imgUrl(tableData.photo_car_path2)"></div></td>
+                                    </tr>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -73,30 +88,40 @@
                             <div class="detailsForm">
                                 <el-form ref="form" :model="form" label-width="90px">
                                    <el-form-item label="审批状态">
-                                        <el-select v-model="form.state" placeholder="未审批">
+                                        <el-select v-model="form.state" placeholder="未通过">
                                             <el-option label="未通过" value="APPLYING"></el-option>
                                             <el-option label="通过" value="FINISHED"></el-option>
                                         </el-select>
                                     </el-form-item>
                                     <el-form-item label="审批备注">
-                                        <el-select v-model="form.remarks" placeholder="未审批">
-                                            <el-option label="备注一" value="APPLYING"></el-option>
-                                            <el-option label="备注一" value="FINISHED"></el-option>
+                                        <el-select v-model="form.remarks" placeholder="无">
+                                            <el-option 
+                                                v-for="(item, index) in options" 
+                                                :key="index" 
+                                                :label="item.content" 
+                                                :value="item.id">
+                                            </el-option>
                                         </el-select>
                                     </el-form-item>
                                     <el-form-item label="途经时间起">
                                         <el-date-picker
-                                            v-model="start_time"
+                                            v-model="form.start_time"
                                             type="datetime"
                                             placeholder="选择日期时间">
                                         </el-date-picker>
                                     </el-form-item>
                                     <el-form-item label="途经时间止">
                                         <el-date-picker
-                                            v-model="end_time"
+                                            v-model="form.end_time"
                                             type="datetime"
                                             placeholder="选择日期时间">
                                         </el-date-picker>
+                                    </el-form-item>
+                                    <el-form-item label="限制时间">
+                                        <el-select v-model="form.limit_time" placeholder="夏季">
+                                            <el-option label="夏季" value="7:00-8:30,11:30-12:30,18:00-20:00"></el-option>
+                                            <el-option label="冬季" value="7:00-8:30,11:30-12:30,17:30-19:30"></el-option>
+                                        </el-select>
                                     </el-form-item>
                                     <el-form-item label="途径路线">
                                         <el-input type="textarea" v-model="form.desc"></el-input>
@@ -116,19 +141,22 @@
 
 <script>
 import Api  from '../../api/index.js';
+import { mapState } from "vuex";
 export default {
     name: "details",
     components: {},
     data() {
         return {
+            tableData: [],
             form: {
                 state: '',
-                remarks: '',
+                remarks: '无',
                 start_time: '',
                 end_time: '',
                 desc: '',
-                options: [],
-            }
+                limit_time:'7:00-8:30,11:30-12:30,18:00-20:00',
+            },
+            options: [],
         };
     },
     props: {
@@ -141,10 +169,45 @@ export default {
     },
     methods: {
         onSubmit(){
+            Api.approvalPermits({
+                id: this.$route.query.id,
+                state: this.form.state,
+                approval_opinion: this.options.content,
+                route: this.form.desc,
+                start_time: this.form.start_time,
+                end_time: this.form.start_time,
+                limit_time: this.form.limit_time,
+            })
+            .then((response) =>{
+                if(response && response.status === 200){
+                    console.log(response.data)
+                }else{
 
+                }            
+            })
+            .catch(function (error) {
+            });
+        },
+        imgUrl(url){
+            Api.photoPath({path: url})
+            .then((response) =>{
+                if(response && response.status === 200){
+                    return  response.data;
+                }else{
+
+                }            
+            })
+            .catch(function (error) {
+            });
         }
     },
-    computed: {},
+    computed: {
+        // ...mapState({
+        //     permitsList: store => {
+        //         return store.managementPermits.permitsList.permits;
+        //     },
+        // }),
+    },
     beforeCreate() {},
     created() {},
     updated() {},
@@ -155,8 +218,27 @@ export default {
         Api.opinions(params)
         .then((response) =>{
             if(response && response.status === 200){
-                console.log(response)
-                this.options = response;
+                this.options = response.data;
+            }else{
+
+            }            
+        })
+        .catch(function (error) {
+        });
+        //查看通行证详情
+        // this.$store.dispatch("fetchPermitsList", {
+        //     id: this.$route.query.id,
+        // });
+        Api.managementPermits({
+            id: this.$route.query.id,
+        })
+        .then((response) =>{
+            if(response && response.status === 200){
+                this.tableData = response.data.permits[0];
+                this.form.state = this.tableData.state == "ACCEPTED"?"通过":"不通过";
+                this.form.start_time = this.tableData.start_time;
+                this.form.end_time = this.tableData.end_time;
+                this.form.desc = this.tableData.route;
             }else{
 
             }            

@@ -9,20 +9,6 @@
         </div>
         <div class="main">
             <div class="conditions">
-                <!-- <div class="demo-input-suffix">
-                    <span>车牌号码：</span><el-input v-model="plate_number" placeholder="请输入内容"></el-input>
-                </div>
-                <div class="demo-input-suffix">
-                    <span>通行证状态：</span>
-                    <el-select v-model="value" placeholder="请选择">
-                        <el-option
-                        v-for="item in options"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value">
-                        </el-option>
-                    </el-select>
-                </div> -->
                 <el-form :inline="true" :model="formInline" class="demo-form-inline">
                     <el-form-item label="车牌号码">
                         <el-input v-model="formInline.number" placeholder="车牌号码"></el-input>
@@ -44,65 +30,102 @@
                     border
                     style="width: 100%">
                     <el-table-column
-                        prop="id"
                         label="ID"
                         >
+                        <template slot-scope="scope">
+                            <p  v-if='scope.row.id' >{{scope.row.id}}</p>
+                            <p v-else>--</p>
+                        </template>
                     </el-table-column>
                     <el-table-column
-                        prop="from"
                         label="出发地"
                         >
+                        <template slot-scope="scope">
+                            <p v-if='scope.row.from' >{{scope.row.from}}</p>
+                            <p v-else>--</p>
+                        </template>
                     </el-table-column>
                     <el-table-column
-                        prop="arrivals"
                         label="目的地">
+                        <template slot-scope="scope">
+                            <p v-if='scope.row.arrivals'>{{scope.row.arrivals}}</p>
+                            <p v-else>--</p>
+                        </template>
                     </el-table-column>
                     <el-table-column
-                        prop="route"
                         label="途经路线">
+                        <template slot-scope="scope">
+                            <p v-if='scope.row.route'>{{scope.row.route}}</p>
+                            <p v-else>--</p>
+                        </template>
                     </el-table-column>
                     <el-table-column
-                        prop="goods"
                         label="运输物品">
+                        <template slot-scope="scope">
+                            <p v-if='scope.row.goods'>{{scope.row.goods}}</p>
+                            <p v-else>--</p>
+                        </template>
                     </el-table-column>
                     <el-table-column
-                        prop="owner"
                         label="车辆所有人">
+                        <template slot-scope="scope">
+                            <p v-if='scope.row.owner'>{{scope.row.owner}}</p>
+                            <p v-else>--</p>
+                        </template>
                     </el-table-column>
                     <el-table-column
-                        prop="phone"
                         label="手机号">
+                        <template slot-scope="scope">
+                            <p v-if='scope.row.phone'>{{scope.row.phone}}</p>
+                            <p v-else>--</p>
+                        </template>
                     </el-table-column>
                     <el-table-column
-                        prop="plate_number"
                         label="车牌号码">
+                        <template slot-scope="scope">
+                            <p v-if='scope.row.phone'>{{scope.row.plate_number}}</p>
+                            <p v-else>--</p>
+                        </template>
                     </el-table-column>
                     <el-table-column
-                        prop="start_time"
                         label="途经时间起">
+                        <template slot-scope="scope">
+                            <p v-if='scope.row.start_time'>{{scope.row.start_time | date-format}}</p>
+                            <p v-else>--</p>
+                        </template>
                     </el-table-column>
                     <el-table-column
-                        prop="end_time"
                         label="途经时间止">
+                        <template slot-scope="scope">
+                            <p v-if='scope.row.end_time'>{{scope.row.end_time | date-format}}</p>
+                            <p v-else>--</p>
+                        </template>
                     </el-table-column>
                     <el-table-column
-                        prop="approve_time"
                         label="申请时间">
+                        <template slot-scope="scope">
+                            <p v-if='scope.row.approve_time'>{{scope.row.create_time | date-format}}</p>
+                            <p v-else>--</p>
+                        </template>
                     </el-table-column>
                     <el-table-column
                         label="操作">
+                        <template slot-scope="scope">
+                            <router-link :to='{path:"/details",query:{id:scope.row.id}}'
+                            class="table-action">审批</router-link>
+                        </template>
                     </el-table-column>
                 </el-table>
             </div>
-            <div class="paging-wrapper" v-if='tableData.length!==0'>
+            <div class="paging-wrapper" v-if='permitsList.length !== 0'>
                 <el-pagination
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
-                :current-page="pageStart"
+                :current-page="page"
                 :page-sizes="[10, 20, 50]"
                 :page-size="pageSize"
                 layout="total, sizes, prev, pager, next, jumper"
-                :total="totalNum">
+                :total="total">
                 </el-pagination>
             </div>
         </div>
@@ -117,9 +140,8 @@ export default {
   components: {},
   data() {
     return {
-        tableData: [],
-        page: "1",
-        size: "10",
+        page: 1,
+        pageSize: 10,
         state: "APPLYING",
         plate_number: "",
         value: "",
@@ -131,25 +153,38 @@ export default {
   },
   props: {},
   methods: {
-        getData(){
+        getListData(){
             this.$store.dispatch("fetchPermitsList", {
                 page: this.page,
-                size: this.size,
+                size: this.pageSize,
                 state: this.formInline.state,
                 plate_number: this.formInline.number,
             });
         },
         onSubmit(){
-            this.getData();
-        }
+            this.getListData();
+        },
+        handleSizeChange(value){
+            // pageSize变化
+            this.pageSize = value;
+            this.getListData();
+        },
+        handleCurrentChange(value){
+            // page变化
+            this.page = value;
+            this.getListData();
+        },
   },
   computed: {
-      ...mapState({
-          //通行证列表
-          permitsList: store => {
-            return store.managementPermits.permitsList.permits;
-        },
-      }),
+        ...mapState({
+            //通行证列表
+            permitsList: store => {
+                return store.managementPermits.permitsList.permits;
+            },
+            total: store => {
+                return store.managementPermits.permitsList.total;
+            },
+        }),
   },
   beforeCreate() {},
   created() {},
@@ -176,7 +211,7 @@ export default {
         // });
         this.$store.dispatch("fetchPermitsList", {
             page: this.page,
-            size: this.size,
+            size: this.pageSize,
             state: "FINISHED",
             plate_number: this.formInline.number,
         });
@@ -206,5 +241,9 @@ export default {
 }
 .demo-input-suffix .el-input{
     width:180px;
+}
+.paging-wrapper{
+    padding-top: 15px;
+    text-align: right;
 }
 </style>

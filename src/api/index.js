@@ -11,9 +11,22 @@ export default{
     examApply(param,callbak) {
         return http.get(`{baseUrl}/v1.0/management/permitsv1.0/auth/login`, param, callbak)
     },
+    //通行证列表
     managementPermits(param,callbak) {
         return http.get(`${baseUrl}/v1.0/management/permits`, param, callbak)
     },
+    //审批通行证
+    approvalPermits(param,callbak) {
+        return http.post(`${baseUrl}/v1.0/management/permits`, param, callbak)
+    },
+    //审批通行证备注
+    opinions(param,callbak) {
+        return http.get(`${baseUrl}/v1.0/management/opinions`, param, callbak)
+    },
+    //查看图片
+    photoPath(param,callbak){
+        return http.get(`${baseUrl}/v1.0/management/photo`, param, callbak)
+    }
 }
 
 
