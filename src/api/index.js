@@ -15,9 +15,13 @@ export default{
     managementPermits(param,callbak) {
         return http.get(`${baseUrl}/v1.0/management/permits`, param, callbak)
     },
+    //查看通行证
+    lookPermits(id) {
+        return http.get(`${baseUrl}/v1.0/management/permits/${id}`)
+    },
     //审批通行证
-    approvalPermits(param,callbak) {
-        return http.post(`${baseUrl}/v1.0/management/permits`, param, callbak)
+    approvalPermits(param,id,callbak) {
+        return http.post(`${baseUrl}/v1.0/management/permits/${id}`, param, callbak)
     },
     //审批通行证备注
     opinions(param,callbak) {

@@ -10,7 +10,7 @@
         </div>
         <div class="main">
             <el-row>
-                <el-col :span="16">
+                <el-col :span=" tableData.state == 'REFUSED'?16:24">
                     <div class="grid-content bg-purple">
                         <div class="grid-header">
                             <h3 class="title">通行证申请详情</h3>
@@ -18,6 +18,18 @@
                         <div class="grid-body">
                             <div class="detailsList">
                                 <table class="el-table el-table--border">
+                                    <tr v-if="tableData.state">
+                                        <th width="30%"><div class="cell">审批意见</div></th>
+                                        <td><div class="cell">{{ tableData.state == "ACCEPTED"?"不通过":"通过" }}</div></td>
+                                    </tr>
+                                    <tr v-if="tableData.approval_opinion">
+                                        <th width="30%"><div class="cell">审批备注</div></th>
+                                        <td><div class="cell">{{ tableData.approval_opinion }}</div></td>
+                                    </tr>
+                                    <tr v-if="tableData.driving_license">
+                                        <th width="30%"><div class="cell">通行证编号</div></th>
+                                        <td><div class="cell">{{ tableData.driving_license }}</div></td>
+                                    </tr>
                                     <tr>
                                         <th width="30%"><div class="cell">手机号</div></th>
                                         <td><div class="cell">{{ tableData.phone }}</div></td>
@@ -58,6 +70,10 @@
                                         <th width="30%"><div class="cell">申请时间</div></th>
                                         <td><div class="cell">{{ tableData.create_time | date-format }}</div></td>
                                     </tr>
+                                    <tr v-if="tableData.approve_time">
+                                        <th width="30%"><div class="cell">批复时间</div></th>
+                                        <td><div class="cell">{{ tableData.approve_time | date-format }}</div></td>
+                                    </tr>
                                     <tr>
                                         <th width="30%"><div class="cell">车辆左前方现状图</div></th>
                                         <td><div class="cell"><img :src="imgUrl(tableData.photo_car_path1)"></div></td>
@@ -79,7 +95,7 @@
                         </div>
                     </div>
                 </el-col>
-                <el-col :span="7" style="float:right;width:31.66667%;">
+                <el-col :span="7" style="float:right;width:31.66667%;" v-if="tableData.state == 'REFUSED'">
                     <div class="grid-content bg-purple-light">
                         <div class="grid-header">
                             <h3 class="title">处理通行证申请</h3>
@@ -89,8 +105,8 @@
                                 <el-form ref="form" :model="form" label-width="90px">
                                    <el-form-item label="审批状态">
                                         <el-select v-model="form.state" placeholder="未通过">
-                                            <el-option label="未通过" value="APPLYING"></el-option>
-                                            <el-option label="通过" value="FINISHED"></el-option>
+                                            <el-option label="通过" value="ACCEPTED"></el-option>
+                                            <el-option label="未通过" value="REFUSED"></el-option>
                                         </el-select>
                                     </el-form-item>
                                     <el-form-item label="审批备注">
@@ -169,15 +185,15 @@ export default {
     },
     methods: {
         onSubmit(){
-            Api.approvalPermits({
-                id: this.$route.query.id,
+            let params = {
                 state: this.form.state,
-                approval_opinion: this.options.content,
                 route: this.form.desc,
-                start_time: this.form.start_time,
-                end_time: this.form.start_time,
+                approval_opinion: this.options.content,
+                start_time: new Date(this.form.start_time).valueOf(),
+                end_time: new Date(this.form.start_time).valueOf(),
                 limit_time: this.form.limit_time,
-            })
+            }
+            Api.approvalPermits(params,this.$route.query.id)
             .then((response) =>{
                 if(response && response.status === 200){
                     console.log(response.data)
@@ -189,16 +205,19 @@ export default {
             });
         },
         imgUrl(url){
-            Api.photoPath({path: url})
-            .then((response) =>{
-                if(response && response.status === 200){
-                    return  response.data;
-                }else{
+            if(url){
+                Api.photoPath({path: url})
+                .then((response) =>{
+                    if(response && response.status === 200){
+                        console.log(response.request.responseURL)
+                        return  response.request.responseURL;
+                    }else{
 
-                }            
-            })
-            .catch(function (error) {
-            });
+                    }            
+                })
+                .catch(function (error) {
+                });
+            }
         }
     },
     computed: {
@@ -229,13 +248,12 @@ export default {
         // this.$store.dispatch("fetchPermitsList", {
         //     id: this.$route.query.id,
         // });
-        Api.managementPermits({
-            id: this.$route.query.id,
-        })
+        //let param = {};
+        Api.lookPermits(this.$route.query.id)
         .then((response) =>{
             if(response && response.status === 200){
-                this.tableData = response.data.permits[0];
-                this.form.state = this.tableData.state == "ACCEPTED"?"通过":"不通过";
+                this.tableData = response.data;
+                //this.form.state = this.tableData.state == "ACCEPTED"?"不通过":"通过";
                 this.form.start_time = this.tableData.start_time;
                 this.form.end_time = this.tableData.end_time;
                 this.form.desc = this.tableData.route;

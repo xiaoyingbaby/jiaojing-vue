@@ -9,18 +9,19 @@
         </div>
         <div class="main">
             <div class="conditions">
-                <el-form :inline="true" :model="formInline" class="demo-form-inline">
-                    <el-form-item label="车牌号码">
-                        <el-input v-model="formInline.number" placeholder="车牌号码"></el-input>
+                <el-form :inline="true" :model="exportForm" class="demo-form-inline" empty-text="暂无数据" :rules='exportFormRule' ref='exportForm'>
+                    <el-form-item label="车牌号码:" prop='plateNumber'>
+                        <el-input v-model="exportForm.plateNumber" placeholder="车牌号码" clearable></el-input>
                     </el-form-item>
-                    <el-form-item label="通行证状态">
+                    <!-- <el-form-item label="通行证状态">
                         <el-select v-model="formInline.state" placeholder="未审批">
                             <el-option label="未审批" value="APPLYING"></el-option>
                             <el-option label="已审批" value="FINISHED"></el-option>
                         </el-select>
-                    </el-form-item>
+                    </el-form-item> -->
                     <el-form-item>
                         <el-button type="primary" @click="onSubmit">查询</el-button>
+                        <el-button  class='el-button-reset' @click="onCancel">重置</el-button>
                     </el-form-item>
                 </el-form>
             </div>
@@ -145,10 +146,18 @@ export default {
         state: "APPLYING",
         plate_number: "",
         value: "",
-        formInline: {
-          number: '',
-          state: ''
-        }
+        // formInline: {
+        //   number: '',
+        //   state: ''
+        // },
+        exportForm: {
+            plateNumber: ''
+        },
+        exportFormRule:{
+            plateNumber: [
+                { required: false, message: '请输入车牌号码', trigger: 'blur' },
+            ]
+        },
     };
   },
   props: {},
@@ -157,8 +166,8 @@ export default {
             this.$store.dispatch("fetchPermitsList", {
                 page: this.page,
                 size: this.pageSize,
-                state: this.formInline.state,
-                plate_number: this.formInline.number,
+                state: "FINISHED",
+                plate_number: this.exportForm.plateNumber,
             });
         },
         onSubmit(){
@@ -173,6 +182,10 @@ export default {
             // page变化
             this.page = value;
             this.getListData();
+        },
+        onCancel(){
+            // 重置：
+            this.$refs['exportForm'].resetFields();
         },
   },
   computed: {
@@ -209,12 +222,7 @@ export default {
         // })
         // .catch(function (error) {
         // });
-        this.$store.dispatch("fetchPermitsList", {
-            page: this.page,
-            size: this.pageSize,
-            state: "FINISHED",
-            plate_number: this.formInline.number,
-        });
+        this.getListData();
   },
   destroyed() {},
   beforeDestroy() {}
