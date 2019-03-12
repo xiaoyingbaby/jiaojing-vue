@@ -5,6 +5,7 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
     state:{
         token: '',
+        userName: '',
         NewMsg:{
             Msgs:[
                 {
@@ -28,9 +29,19 @@ const store = new Vuex.Store({
             // obj.id = 'Msg_' + Obj.id;
             // obj.url = '#' + obj.id;
             // state.NewMsg.Msgs.push(obj);
+        },
+        setToken (state,Obj){
+            // state.
+        },
+        SETUSER (state, payload ){
+            console.log('payload',payload)
+            state.userName = payload;
         }
     },
     actions:{
+        setUser(context, payload ){
+            context.commit( 'SETUSER', payload );
+        },
         fetchMsg (context){
             // $.ajax({
             //         url:'PHP/GetMsgs.php',

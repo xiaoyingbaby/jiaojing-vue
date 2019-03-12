@@ -35,7 +35,10 @@ const router =  new Router({
 			path: '/examed',
 			name: '审批日志',
 			icon: 'iconshenpitongguo',
-			component: Examed
+			component: Examed,
+			meta: { 
+				requireAuth: true
+			},
 		},
 		{
 			path: '/export',
@@ -53,22 +56,22 @@ const router =  new Router({
 })
 
 // 路由拦截
-// router.beforeEach((to, from, next) => {
-// 	if (to.matched.some(res => res.meta.requireAuth )) {// 判断是否需要登录权限
-// 		if (localStorage.getItem('username')) {// 判断是否登录
+router.beforeEach((to, from, next) => {
+	if (to.matched.some(res => res.meta.requireAuth )) {// 判断是否需要登录权限
+		if (localStorage.getItem('TOKEN')) {// 判断是否登录
 
-// 			next()
+			next()
 
-// 		} else {// 没登录则跳转到登录界面
+		} else {// 没登录则跳转到登录界面
 
-// 			next({
-// 				path: '/login',
-// 				query: {redirect: to.fullPath}
-// 			})
-// 		}
-// 	} else {
-// 		next()
-// 	}
-// })
+			next({
+				path: '/login',
+				query: {redirect: to.fullPath}
+			})
+		}
+	} else {
+		next()
+	}
+})
 
 export default router

@@ -19,8 +19,9 @@
                         :collapse = isCollapse
 					>
                         <div  class="container-logo">
-                            <img :src="logoImg" alt="安阳交警管理平台">
+                            <!-- <img :src="logoImg" alt="安阳交警管理平台"> -->
                             <span v-show='!isCollapse'>安阳交警管理平台</span>
+                            <span v-show='isCollapse'>交警</span>
                         </div>
 						<template v-for="(item,index) in $router.options.routes" v-if="!item.hidden">
 							<el-submenu :index="index+''" :key="index" v-if="item.isPull">
@@ -56,6 +57,19 @@
                     <el-header class="app-header">
                        <i class="iconindent collapse-icon iconfont" @click="toggleMenu" v-show="isCollapse"></i>
                        <i class="iconoutdent collapse-icon iconfont" @click="toggleMenu" v-show="!isCollapse"></i>
+					   <div class="user-wrapper">
+						   <el-dropdown trigger="click" @command="command">
+								<span class="el-dropdown-link">
+									<img :src="logoImg" alt="安阳交警管理平台">
+									<span>{{userName}}</span>
+								</span>
+								<el-dropdown-menu slot="dropdown">
+									<el-dropdown-item command="xgmm">修改密码</el-dropdown-item>
+									<el-dropdown-item command="tc">退出</el-dropdown-item>
+								</el-dropdown-menu>
+							</el-dropdown>
+						   
+					   </div>
                     </el-header>
                     <div class="app-main">
                         <router-view/>
@@ -84,8 +98,14 @@ export default {
 			openeds: [],
             path: 'default',
             isCollapse: false,
-            logoImg: logoImg
+			logoImg: logoImg,
+			// userName: ''
         }
+	},
+	computed: {
+		userName () {
+			return this.$store.state.userName
+		}
 	},
 	updated : function(){
 		/* 判断显示的组件 */
@@ -132,8 +152,27 @@ export default {
     }
 }
 .app-header{
+	position: relative;
     line-height: 60px;
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+	box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+	.user-wrapper{
+		position: absolute;
+		right: 20px;
+		top: 0px;
+		line-height: 60px;
+		img{
+			display: inline-block;
+			vertical-align: middle;
+			width: 20px;
+			position: relative;
+			top: -2px;
+		}
+		span{
+			display: inline-block;
+			cursor: pointer;
+		}
+	}
+	
 }
 .app-main{
     // padding: 20px;

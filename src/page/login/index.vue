@@ -130,7 +130,7 @@ export default {
 					.then((response) =>{
 						this.disabled = false;
 						if(response && response.status === 200){
-							// console.log(response)
+							this.$store.dispatch('setUser', response.data.sub)
 							this.$router.push({path: "/unexam"});
 						}else{
 
@@ -138,7 +138,7 @@ export default {
 						
 						
 					})
-					.catch(function (error) {
+					.catch((error) => {
 						this.disabled = false;
 					});
 				}else{
