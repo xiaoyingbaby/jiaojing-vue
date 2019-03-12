@@ -76,19 +76,19 @@
                                     </tr>
                                     <tr>
                                         <th width="30%"><div class="cell">车辆左前方现状图</div></th>
-                                        <td><div class="cell"><img :src="imgUrl(tableData.photo_car_path1)"></div></td>
+                                        <td><div class="cell"><img :src="urls[0]"></div></td>
                                     </tr>
                                     <tr>
                                         <th width="30%"><div class="cell">行驶证正面</div></th>
-                                        <td><div class="cell"><img :src="imgUrl(tableData.photo_vehicle_license_path1)"></div></td>
+                                        <td><div class="cell"><img :src="urls[1]"></div></td>
                                     </tr>
                                     <tr>
                                         <th width="30%"><div class="cell">行驶证反面</div></th>
-                                        <td><div class="cell"><img :src="imgUrl(tableData.photo_vehicle_license_path2)"></div></td>
+                                        <td><div class="cell"><img :src="urls[2]"></div></td>
                                     </tr>
                                     <tr>
                                         <th width="30%"><div class="cell">车辆尾部照片</div></th>
-                                        <td><div class="cell"><img :src="imgUrl(tableData.photo_car_path2)"></div></td>
+                                        <td><div class="cell"><img :src="urls[3]"></div></td>
                                     </tr>
                                 </table>
                             </div>
@@ -173,6 +173,7 @@ export default {
                 limit_time:'7:00-8:30,11:30-12:30,18:00-20:00',
             },
             options: [],
+            urls:[],
         };
     },
     props: {
@@ -209,8 +210,8 @@ export default {
                 Api.photoPath({path: url})
                 .then((response) =>{
                     if(response && response.status === 200){
-                        console.log(response.request.responseURL)
-                        return  response.request.responseURL;
+                        //return  response.request.responseURL;
+                        this.urls.push(response.request.responseURL);
                     }else{
 
                     }            
@@ -248,7 +249,6 @@ export default {
         // this.$store.dispatch("fetchPermitsList", {
         //     id: this.$route.query.id,
         // });
-        //let param = {};
         Api.lookPermits(this.$route.query.id)
         .then((response) =>{
             if(response && response.status === 200){
@@ -257,6 +257,10 @@ export default {
                 this.form.start_time = this.tableData.start_time;
                 this.form.end_time = this.tableData.end_time;
                 this.form.desc = this.tableData.route;
+                this.imgUrl(this.tableData.photo_car_path1);
+                this.imgUrl(this.tableData.photo_vehicle_license_path1);
+                this.imgUrl(this.tableData.photo_vehicle_license_path2);
+                this.imgUrl(this.tableData.photo_car_path2);
             }else{
 
             }            
