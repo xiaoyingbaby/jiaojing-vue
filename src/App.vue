@@ -6,7 +6,7 @@
 			<!--  -->
 			<el-container class="container-wrap">
                 
-				<div class="container-aside">
+				<div class="container-aside" v-if="$route.meta.show_aside">
 					<el-menu
 						:default-active="$route.path"
 						class="el-menu-vertical-demo"
@@ -54,7 +54,7 @@
 					</el-menu>
 				</div>
 				<el-main class="container-main">
-                    <el-header class="app-header">
+                    <el-header class="app-header" v-if="$route.meta.show_header">
                        <i class="iconindent collapse-icon iconfont" @click="toggleMenu" v-show="isCollapse"></i>
                        <i class="iconoutdent collapse-icon iconfont" @click="toggleMenu" v-show="!isCollapse"></i>
 					   <div class="user-wrapper">

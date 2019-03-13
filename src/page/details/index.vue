@@ -5,12 +5,12 @@
             <el-breadcrumb separator-class="el-icon-arrow-right">
                 <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
                 <el-breadcrumb-item :to="{ path: '/unexam' }">{{ breadcrumbitem }}</el-breadcrumb-item>
-                <el-breadcrumb-item>审批</el-breadcrumb-item>
+                <el-breadcrumb-item>{{ breadcrumbitem == '通行证审批'?'审批':'查看详情' }}</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="main">
-            <el-row>
-                <el-col :span=" tableData.state == 'REFUSED'?16:24">
+            <el-row v-loading="loading">
+                <el-col :span=" state == 'APPLYING'?16:24">
                     <div class="grid-content bg-purple">
                         <div class="grid-header">
                             <h3 class="title">通行证申请详情</h3>
@@ -18,17 +18,17 @@
                         <div class="grid-body">
                             <div class="detailsList">
                                 <table class="el-table el-table--border">
-                                    <tr v-if="tableData.state">
+                                    <tr v-if="state == 'FINISHED'">
                                         <th width="30%"><div class="cell">审批意见</div></th>
-                                        <td><div class="cell">{{ tableData.state == "ACCEPTED"?"不通过":"通过" }}</div></td>
+                                        <td><div class="cell">{{ approvalState(tableData.state) }}</div></td>
                                     </tr>
-                                    <tr v-if="tableData.approval_opinion">
+                                    <tr v-if="state == 'FINISHED'">
                                         <th width="30%"><div class="cell">审批备注</div></th>
                                         <td><div class="cell">{{ tableData.approval_opinion }}</div></td>
                                     </tr>
-                                    <tr v-if="tableData.driving_license">
+                                    <tr v-if="state == 'FINISHED'">
                                         <th width="30%"><div class="cell">通行证编号</div></th>
-                                        <td><div class="cell">{{ tableData.driving_license }}</div></td>
+                                        <td><div class="cell">{{ tableData.permit_number }}</div></td>
                                     </tr>
                                     <tr>
                                         <th width="30%"><div class="cell">手机号</div></th>
@@ -55,8 +55,8 @@
                                         <td><div class="cell">{{ tableData.plate_number }}</div></td>
                                     </tr>
                                     <tr>
-                                        <th width="30%"><div class="cell">通行证编号</div></th>
-                                        <td><div class="cell">{{ tableData.permit_number }}</div></td>
+                                        <th width="30%"><div class="cell">驾驶人驾驶证号</div></th>
+                                        <td><div class="cell">{{ tableData.driving_license }}</div></td>
                                     </tr>
                                     <tr>
                                         <th width="30%"><div class="cell">途经时间起</div></th>
@@ -76,26 +76,26 @@
                                     </tr>
                                     <tr>
                                         <th width="30%"><div class="cell">车辆左前方现状图</div></th>
-                                        <td><div class="cell"><img :src="urls[0]"></div></td>
+                                        <td><div class="cell"><img :src="`${baseUrl}`+ tableData.photo_car_path1"></div></td>
                                     </tr>
                                     <tr>
                                         <th width="30%"><div class="cell">行驶证正面</div></th>
-                                        <td><div class="cell"><img :src="urls[1]"></div></td>
+                                        <td><div class="cell"><img :src="`${baseUrl}`+ tableData.photo_vehicle_license_path1"></div></td>
                                     </tr>
                                     <tr>
                                         <th width="30%"><div class="cell">行驶证反面</div></th>
-                                        <td><div class="cell"><img :src="urls[2]"></div></td>
+                                        <td><div class="cell"><img :src="`${baseUrl}`+ tableData.photo_vehicle_license_path2"></div></td>
                                     </tr>
                                     <tr>
                                         <th width="30%"><div class="cell">车辆尾部照片</div></th>
-                                        <td><div class="cell"><img :src="urls[3]"></div></td>
+                                        <td><div class="cell"><img :src="`${baseUrl}`+ tableData.photo_car_path2"></div></td>
                                     </tr>
                                 </table>
                             </div>
                         </div>
                     </div>
                 </el-col>
-                <el-col :span="7" style="float:right;width:31.66667%;" v-if="tableData.state == 'REFUSED'">
+                <el-col :span="7" style="float:right;width:31.66667%;" v-if="state == 'APPLYING'">
                     <div class="grid-content bg-purple-light">
                         <div class="grid-header">
                             <h3 class="title">处理通行证申请</h3>
@@ -115,7 +115,7 @@
                                                 v-for="(item, index) in options" 
                                                 :key="index" 
                                                 :label="item.content" 
-                                                :value="item.id">
+                                                :value="item.content">
                                             </el-option>
                                         </el-select>
                                     </el-form-item>
@@ -135,6 +135,7 @@
                                     </el-form-item>
                                     <el-form-item label="限制时间">
                                         <el-select v-model="form.limit_time" placeholder="夏季">
+                                            <el-option label="无" value=""></el-option>
                                             <el-option label="夏季" value="7:00-8:30,11:30-12:30,18:00-20:00"></el-option>
                                             <el-option label="冬季" value="7:00-8:30,11:30-12:30,17:30-19:30"></el-option>
                                         </el-select>
@@ -165,7 +166,7 @@ export default {
         return {
             tableData: [],
             form: {
-                state: '',
+                state: 'REFUSED',
                 remarks: '无',
                 start_time: '',
                 end_time: '',
@@ -174,22 +175,21 @@ export default {
             },
             options: [],
             urls:[],
+            state:'',
+            baseUrl: process.env.API_URL ? process.env.API_URL : '',
+            breadcrumbitem:'通行证审批',
+            loading: true,
         };
     },
     props: {
-        breadcrumbitem:  {
-            type: String,
-            default: () => {
-                return "通行证审批";
-            }
-        },
+
     },
     methods: {
         onSubmit(){
             let params = {
                 state: this.form.state,
                 route: this.form.desc,
-                approval_opinion: this.options.content,
+                approval_opinion: this.form.remarks,
                 start_time: new Date(this.form.start_time).valueOf(),
                 end_time: new Date(this.form.start_time).valueOf(),
                 limit_time: this.form.limit_time,
@@ -197,7 +197,7 @@ export default {
             Api.approvalPermits(params,this.$route.query.id)
             .then((response) =>{
                 if(response && response.status === 200){
-                    console.log(response.data)
+                    this.$router.push({path: "/unexam"});
                 }else{
 
                 }            
@@ -219,7 +219,23 @@ export default {
                 .catch(function (error) {
                 });
             }
-        }
+        },
+        //审批意见合集
+        approvalState(state) {
+            switch (state) {
+                case "REFUSED":
+                return "未通过";
+                break;
+                case "EXPIRED":
+                return "已过期";
+                break;
+                case "ACCEPTED":
+                return "通过";
+                break;
+                default:
+                break;
+            }
+        },
     },
     computed: {
         // ...mapState({
@@ -229,7 +245,13 @@ export default {
         // }),
     },
     beforeCreate() {},
-    created() {},
+    created() {
+        this.state = this.$route.query.state;
+        this.breadcrumbitem = this.$route.query.breadcrumbitem;
+        if(this.state == "APPLYING" && localStorage.getItem('uid') == null){
+            this.$router.push({path: "/login"});
+        }
+    },
     updated() {},
     beforeUpdate() {},
     beforeMount() {},
@@ -253,14 +275,14 @@ export default {
         .then((response) =>{
             if(response && response.status === 200){
                 this.tableData = response.data;
-                //this.form.state = this.tableData.state == "ACCEPTED"?"不通过":"通过";
                 this.form.start_time = this.tableData.start_time;
                 this.form.end_time = this.tableData.end_time;
                 this.form.desc = this.tableData.route;
-                this.imgUrl(this.tableData.photo_car_path1);
-                this.imgUrl(this.tableData.photo_vehicle_license_path1);
-                this.imgUrl(this.tableData.photo_vehicle_license_path2);
-                this.imgUrl(this.tableData.photo_car_path2);
+                this.loading = false;
+                // this.imgUrl(this.tableData.photo_car_path1);
+                // this.imgUrl(this.tableData.photo_vehicle_license_path1);
+                // this.imgUrl(this.tableData.photo_vehicle_license_path2);
+                // this.imgUrl(this.tableData.photo_car_path2);
             }else{
 
             }            

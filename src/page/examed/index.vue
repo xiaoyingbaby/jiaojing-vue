@@ -106,7 +106,7 @@
                         min-width="90">
                         <template slot-scope="scope">
                             <div>
-                                <p v-if='scope.row.approval_opinion'>{{scope.row.approval_opinion}}</p>
+                                <p v-if='scope.row.state'>{{approvalState(scope.row.state)}}</p>
                                 <p v-else>--</p>
                             </div>
                             
@@ -170,8 +170,10 @@
                             <a href="javascript:;" 
                                 size="small"
                                 @click="handleEdit(scope.$index, scope.row)" v-if='scope.row.modifyButton' class="table-action">修订</a>
-                            <router-link :to='{path:"/detail",query:{type:"totalLib",fileCode:scope.row.fileCode,fileType:scope.row.fileType}}'
-                            class="table-action">查看</router-link>
+                            <router-link :to='{path:"/details",query:{id:scope.row.id,state:"FINISHED",breadcrumbitem:"审批日志"}}'
+                            class="table-action mr10">查看</router-link>
+                            <router-link v-if='scope.row.state !== "REFUSED"' :to='{path:"/permit",query:{id:scope.row.id,plate_number:scope.row.plate_number,permit_number:scope.row.permit_number,phone:scope.row.phone}}'
+                            class="table-action">查看通行证</router-link>
                             <a href="javascript:;"
                                 size="small"
                                 type="danger"
@@ -208,7 +210,10 @@
     text-align: right;
 }
 .table-action{
-    word-break: keep-all
+    word-break: keep-all;
+}
+.mr10{
+    margin-right: 10px;
 }
 .w192{
     width: 192px;
@@ -352,6 +357,22 @@ export default {
             //     }
                 
             // });
+        },
+        //审批意见合集
+        approvalState(state) {
+            switch (state) {
+                case "REFUSED":
+                return "未通过";
+                break;
+                case "EXPIRED":
+                return "已过期";
+                break;
+                case "ACCEPTED":
+                return "通过";
+                break;
+                default:
+                break;
+            }
         },
         handleSizeChange(value){
             // pageSize变化
