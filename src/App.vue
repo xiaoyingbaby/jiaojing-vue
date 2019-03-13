@@ -121,6 +121,7 @@ export default {
 		}
 	},
     mounted () {
+		console.log(this.$store.state,'ddd')
         const openeds = [];
         for (let i = 0; i < this.$router.options.routes.length; i++) {
             if (this.$route.path.indexOf(this.$router.options.routes[i].path) > -1) {

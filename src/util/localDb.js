@@ -11,20 +11,18 @@ const localDb = {
      * @param {String, Object} value 所要存贮的数据
      */
     set(key, value, type = 1) {
+        
         if(type){
-            if (!value) delete window.localStorage[key]
-            else {
-                const val = typeof value === 'object' ?
-                JSON.stringify(value) : value
-                window.localStorage[key] = val
-            }
+            // if (!value) delete window.localStorage[key]
+            // else {
+            const val = typeof value === 'object' ?
+            JSON.stringify(value) : value
+            window.localStorage[key] = val
+            // }
         }else{
-            if (!value) delete window.sessionStorage[key]
-            else {
-                const val = typeof value === 'object' ?
-                JSON.stringify(value) : value
-                window.sessionStorage[key] = val
-            }
+            const val = typeof value === 'object' ?
+            JSON.stringify(value) : value
+            window.sessionStorage[key] = val
         }
         
     },
@@ -62,11 +60,11 @@ const localDb = {
      * 清空localStorage
      * @return 无返回NULL
      */
-    clear(type) {
+    clear(type,value) {
         if(type === '1'){
-            window.localStorage.clear()
+            window.localStorage.removeItem(value)
         }else if(type === '2'){
-            window.sessionStorage.clear()
+            window.sessionStorage.removeItem(value)
         }else if(type === '3'){
             window.localStorage.clear()
             window.sessionStorage.clear()

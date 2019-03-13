@@ -5,9 +5,10 @@ import localDb from '../util/localDb'
 Vue.use(Vuex);
 const store = new Vuex.Store({
     state:{
-        token: localDb.get('TOKEN',this.isRem),
-        userName: '',
-        isRem: false,
+        token: localDb.get('TOKEN',localDb.get('isRem')),
+        userName: localDb.get('userName'),
+        isRem: localDb.get('isRem'),
+        dd: this.$store,
         NewMsg:{
             Msgs:[
                 {
@@ -35,11 +36,19 @@ const store = new Vuex.Store({
         SETTOKEN (state, payload){
             state.token = payload.token;
             localDb.set('TOKEN',payload.token,payload.isRem)
+            if(payload.isRem){
+                localDb.clear('2','TOKEN')
+            }else{
+                localDb.clear('1','TOKEN')
+            }
+            
         },
         SETUSER (state, payload ){
-            state.userName = payload;
+            localDb.set('userName',payload.userName)
+            state.userName = localDb.get('userName');
         },
         SETISREM (state, payload ){
+            localDb.set('isRem',payload)
             state.isRem = payload;
         }
     },

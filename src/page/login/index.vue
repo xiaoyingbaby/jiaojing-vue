@@ -133,11 +133,12 @@ export default {
 							// 设置token
 							let _user = {
 								isRem: _remember_me,
-								token: response['headers']['x-auth-token']
+								token: response['headers']['x-auth-token'],
+								userName: response.data.sub
 							}
-							localDb.clear('3')
+							// localDb.clear('3')
 							this.$store.dispatch('setToken', _user)
-							this.$store.dispatch('setUser', response.data.sub)
+							this.$store.dispatch('setUser', _user)
 							this.$store.dispatch('setIsRem',_remember_me)
 							this.$router.push({path: "/unexam"});
 						}else{
