@@ -16,30 +16,21 @@ const router =  new Router({
 			name: 'login',
 			component: Login,
 			hidden: true,
-			meta: {
-				show_header: false,
-				show_aside: false,
-			}
 		},
 		{
 			path: '/login',
 			name: 'login',
 			component: Login,
 			hidden: true,
-			meta: {
-				show_header: false,
-				show_aside: false,
-			}
 		},
 		{
 			path: '/unexam',
 			name: '通行证审批',
 			icon: 'iconshenpi',
 			component: Unexam,
-			meta: {
-				show_header: true,
-				show_aside: true,
-			}
+			meta: { 
+				requireAuth: true,
+			},
 		},
 		{
 			path: '/examed',
@@ -48,8 +39,6 @@ const router =  new Router({
 			component: Examed,
 			meta: { 
 				requireAuth: true,
-				show_header: true,
-				show_aside: true,
 			},
 		},
 		{
@@ -58,8 +47,7 @@ const router =  new Router({
 			icon: 'icondaochu',
 			component: Export,
 			meta: {
-				show_header: true,
-				show_aside: true,
+				requireAuth: true
 			}
 		},
 		{
@@ -68,8 +56,7 @@ const router =  new Router({
 			component: Detail,
 			hidden: true,
 			meta: {
-				show_header: true,
-				show_aside: true,
+				requireAuth: true
 			}
 		},
 		{
@@ -78,8 +65,9 @@ const router =  new Router({
 			component: Permit,
 			hidden: true,
 			meta: {
-				show_header: false,
-				show_aside: false,
+				meta: { 
+					requireAuth: true,
+				}
 			}
 		}
 	]

@@ -6,7 +6,7 @@
 			<!--  -->
 			<el-container class="container-wrap">
                 
-				<div class="container-aside" v-if="$route.meta.show_aside">
+				<div class="container-aside">
 					<el-menu
 						:default-active="$route.path"
 						class="el-menu-vertical-demo"
@@ -83,6 +83,9 @@
 	<template v-else-if="path === 'login'">
 		<router-view/>
 	</template>
+	<template v-else-if="path === 'permit'">
+		<router-view/>
+	</template>
   </div>
 </template>
 
@@ -114,8 +117,8 @@ export default {
 		console.log(path,'path')
 		if(path === '/login' || path === '/'){
 			this.path = 'login';
-		}else if(path === '/sign'){
-			this.path = 'sign';
+		}else if(path === '/permit'){
+			this.path = 'permit';
 		}else{
 			this.path = 'default';
 		}
