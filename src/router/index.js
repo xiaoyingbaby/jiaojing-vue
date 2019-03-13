@@ -5,6 +5,7 @@ import Examed from '@/page/examed'
 import Export from '@/page/export'
 import Login from '@/page/login'
 import Detail from '@/page/details'
+import Permit from '@/page/permit'
 
 Vue.use(Router)
 
@@ -14,22 +15,31 @@ const router =  new Router({
 			path: '/',
 			name: 'login',
 			component: Login,
-			hidden: true
+			hidden: true,
+			meta: {
+				show_header: false,
+				show_aside: false,
+			}
 		},
 		{
 			path: '/login',
 			name: 'login',
 			component: Login,
-			hidden: true
+			hidden: true,
+			meta: {
+				show_header: false,
+				show_aside: false,
+			}
 		},
 		{
 			path: '/unexam',
 			name: '通行证审批',
 			icon: 'iconshenpi',
 			component: Unexam,
-			// meta: { 
-			// 	requireAuth: true
-			// },
+			meta: {
+				show_header: true,
+				show_aside: true,
+			}
 		},
 		{
 			path: '/examed',
@@ -37,20 +47,40 @@ const router =  new Router({
 			icon: 'iconshenpitongguo',
 			component: Examed,
 			meta: { 
-				requireAuth: true
+				requireAuth: true,
+				show_header: true,
+				show_aside: true,
 			},
 		},
 		{
 			path: '/export',
 			name: '导出日志',
 			icon: 'icondaochu',
-			component: Export
+			component: Export,
+			meta: {
+				show_header: true,
+				show_aside: true,
+			}
 		},
 		{
 			path: '/details',
 			name: '查看审批详情',
 			component: Detail,
-			hidden: true
+			hidden: true,
+			meta: {
+				show_header: true,
+				show_aside: true,
+			}
+		},
+		{
+			path: '/permit',
+			name: '通行证',
+			component: Permit,
+			hidden: true,
+			meta: {
+				show_header: false,
+				show_aside: false,
+			}
 		}
 	]
 })

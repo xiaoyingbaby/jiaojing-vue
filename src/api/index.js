@@ -30,6 +30,10 @@ export default{
     //查看图片
     photoPath(param,callbak){
         return http.get(`${baseUrl}/v1.0/management/photo`, param, callbak)
+    },
+    //通行证
+    permitsInfo(param,id,callbak){
+        return http.get(`${baseUrl}/v1.0/management/permits/${id}/info`, param, callbak)
     }
 }
 

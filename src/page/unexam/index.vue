@@ -105,14 +105,14 @@
                     <el-table-column
                         label="申请时间">
                         <template slot-scope="scope">
-                            <p v-if='scope.row.approve_time'>{{scope.row.create_time | date-format}}</p>
+                            <p v-if='scope.row.create_time'>{{scope.row.create_time | date-format}}</p>
                             <p v-else>--</p>
                         </template>
                     </el-table-column>
                     <el-table-column
                         label="操作">
                         <template slot-scope="scope">
-                            <router-link :to='{path:"/details",query:{id:scope.row.id}}'
+                            <router-link :to='{path:"/details",query:{id:scope.row.id,state:"APPLYING",breadcrumbitem:"通行证审批"}}'
                             class="table-action">审批</router-link>
                         </template>
                     </el-table-column>
@@ -166,7 +166,7 @@ export default {
             this.$store.dispatch("fetchPermitsList", {
                 page: this.page,
                 size: this.pageSize,
-                state: "FINISHED",
+                state: "APPLYING",
                 plate_number: this.exportForm.plateNumber,
             });
         },
