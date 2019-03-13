@@ -118,7 +118,7 @@
                     </el-table-column>
                 </el-table>
             </div>
-            <div class="paging-wrapper" v-if='permitsList.length !== 0'>
+            <div class="paging-wrapper" v-if='permitsListLength !== 0'>
                 <el-pagination
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
@@ -198,6 +198,11 @@ export default {
                 return store.managementPermits.permitsList.total;
             },
         }),
+        permitsListLength(){
+            if(this.permitsList){
+                return this.permitsList.length;
+            }
+        },
   },
   beforeCreate() {},
   created() {},
