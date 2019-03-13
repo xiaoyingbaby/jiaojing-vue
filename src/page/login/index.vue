@@ -130,7 +130,15 @@ export default {
 					.then((response) =>{
 						this.disabled = false;
 						if(response && response.status === 200){
+							// 设置token
+							let _user = {
+								isRem: _remember_me,
+								token: response['headers']['x-auth-token']
+							}
+							localDb.clear('3')
+							this.$store.dispatch('setToken', _user)
 							this.$store.dispatch('setUser', response.data.sub)
+							this.$store.dispatch('setIsRem',_remember_me)
 							this.$router.push({path: "/unexam"});
 						}else{
 

@@ -21,8 +21,10 @@ function isLogin() {
 //添加请求拦截器
 service.interceptors.request.use(function(config){
     // console.log(localDb.get('TOKEN'),'dddd')
-    if(localDb.get('TOKEN')){
-        config.headers['x-auth-token'] = localDb.get('TOKEN')
+    if(localDb.get('TOKEN',true)){
+        config.headers['x-auth-token'] = localDb.get('TOKEN',true)
+    }else if(localDb.get('TOKEN',false)){
+        config.headers['x-auth-token'] = localDb.get('TOKEN',false)
     }
     return config
 },function(error){
@@ -53,9 +55,9 @@ service.interceptors.response.use(function(response){
    //   }
    // },
 
-    if(response && response.headers && response['headers']['x-auth-token']){
-        localDb.set('TOKEN',response['headers']['x-auth-token'])
-    }
+    // if(response && response.headers && response['headers']['x-auth-token']){
+    //     localDb.set('TOKEN',response['headers']['x-auth-token'])
+    // }
   
     console.log(response)
         return response
@@ -64,12 +66,14 @@ service.interceptors.response.use(function(response){
         // 清空token，跳转到登陆页
         if(error && error.response){
             if(error.response.status === 401){
-                console.log(error.response.data.error_msg,'error');
                 Message({
                     message:error.response.data.error_msg,
                     type:'error',
                     duration: 4*1000 
                 })
+                // 清除TOKEN
+
+                // 跳转页面
                 router.replace({
                     path: 'login',
                     query: {redirect: router.currentRoute.fullPath}

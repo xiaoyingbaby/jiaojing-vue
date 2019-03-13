@@ -10,13 +10,23 @@ const localDb = {
      * @param {String} key   存贮数据的唯一标识
      * @param {String, Object} value 所要存贮的数据
      */
-    set(key, value) {
-        if (!value) delete window.localStorage[key]
-        else {
-            const val = typeof value === 'object' ?
-            JSON.stringify(value) : value
-            window.localStorage[key] = val
+    set(key, value, type = 1) {
+        if(type){
+            if (!value) delete window.localStorage[key]
+            else {
+                const val = typeof value === 'object' ?
+                JSON.stringify(value) : value
+                window.localStorage[key] = val
+            }
+        }else{
+            if (!value) delete window.sessionStorage[key]
+            else {
+                const val = typeof value === 'object' ?
+                JSON.stringify(value) : value
+                window.sessionStorage[key] = val
+            }
         }
+        
     },
 
 
@@ -25,9 +35,15 @@ const localDb = {
      * @param  {String} key  获取数据的可以标识
      * @return {String, Object}  返回空，字符串或者对象
      */
-    get(key) {
-        const str = window.localStorage[key] || ''
-        return this.isJSONStr(str) ? JSON.parse(str) : str
+    get(key,type = 1) {
+        if(type){
+            const str = window.localStorage[key] || ''
+            return this.isJSONStr(str) ? JSON.parse(str) : str
+        }else{
+            const str = window.sessionStorage[key] || ''
+            return this.isJSONStr(str) ? JSON.parse(str) : str
+        }
+        
     },
 
     /**
@@ -46,8 +62,16 @@ const localDb = {
      * 清空localStorage
      * @return 无返回NULL
      */
-    clear() {
-        window.localStorage.clear()
+    clear(type) {
+        if(type === '1'){
+            window.localStorage.clear()
+        }else if(type === '2'){
+            window.sessionStorage.clear()
+        }else if(type === '3'){
+            window.localStorage.clear()
+            window.sessionStorage.clear()
+        }
+        
     },
 }
 

@@ -90,6 +90,7 @@
 <script>
 import '@/assets/icon/iconfont.css'
 import logoImg from '@/assets/images/coin.png'
+import localDb from './util/localDb.js'
 export default {
     name: 'App',
     data () {
@@ -137,6 +138,24 @@ export default {
     methods: {
         toggleMenu(){
             this.isCollapse = !this.isCollapse;
+        },
+        // 菜单点击
+        command(key){
+            
+            if(key === 'tc'){
+                this.tc();
+            }else if(key === 'xgmm'){
+                this.xgmm()
+            }
+        },
+        // 点击退出
+        tc(){
+            localDb.clear('3')
+            this.$router.push({path: "/login"});
+        },
+        // 修改密码
+        xgmm(){
+            
         }
     }
 }

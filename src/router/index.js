@@ -58,7 +58,7 @@ const router =  new Router({
 // 路由拦截
 router.beforeEach((to, from, next) => {
 	if (to.matched.some(res => res.meta.requireAuth )) {// 判断是否需要登录权限
-		if (localStorage.getItem('TOKEN')) {// 判断是否登录
+		if (localStorage.getItem('TOKEN') || sessionStorage.getItem('TOKEN')) {// 判断是否登录
 
 			next()
 

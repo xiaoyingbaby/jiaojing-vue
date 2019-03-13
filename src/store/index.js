@@ -1,11 +1,13 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import managementPermits from "./modules/managementPermits";
+import localDb from '../util/localDb'
 Vue.use(Vuex);
 const store = new Vuex.Store({
     state:{
-        token: '',
+        token: localDb.get('TOKEN',this.isRem),
         userName: '',
+        isRem: false,
         NewMsg:{
             Msgs:[
                 {
@@ -30,17 +32,26 @@ const store = new Vuex.Store({
             // obj.url = '#' + obj.id;
             // state.NewMsg.Msgs.push(obj);
         },
-        setToken (state,Obj){
-            // state.
+        SETTOKEN (state, payload){
+            state.token = payload.token;
+            localDb.set('TOKEN',payload.token,payload.isRem)
         },
         SETUSER (state, payload ){
-            console.log('payload',payload)
             state.userName = payload;
+        },
+        SETISREM (state, payload ){
+            state.isRem = payload;
         }
     },
     actions:{
         setUser(context, payload ){
             context.commit( 'SETUSER', payload );
+        },
+        setToken(context, payload ){
+            context.commit( 'SETTOKEN', payload );
+        },
+        setIsRem(context, payload ){
+            context.commit( 'SETISREM', payload );
         },
         fetchMsg (context){
             // $.ajax({
