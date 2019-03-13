@@ -6,6 +6,7 @@ import Export from '@/page/export'
 import Login from '@/page/login'
 import Detail from '@/page/details'
 import Permit from '@/page/permit'
+import ResetPassword from '@/page/resetPassword'
 
 Vue.use(Router)
 
@@ -21,6 +22,12 @@ const router =  new Router({
 			path: '/login',
 			name: 'login',
 			component: Login,
+			hidden: true,
+		},
+		{
+			path: '/resetPassword',
+			name: 'resetPassword',
+			component: ResetPassword,
 			hidden: true,
 		},
 		{
@@ -46,6 +53,7 @@ const router =  new Router({
 			name: '导出日志',
 			icon: 'icondaochu',
 			component: Export,
+			hidden: true,
 			meta: {
 				requireAuth: true
 			}

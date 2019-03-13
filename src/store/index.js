@@ -8,7 +8,6 @@ const store = new Vuex.Store({
         token: localDb.get('TOKEN',localDb.get('isRem')),
         userName: localDb.get('userName'),
         isRem: localDb.get('isRem'),
-        dd: this.$store,
         NewMsg:{
             Msgs:[
                 {

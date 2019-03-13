@@ -1,7 +1,7 @@
 <template>
     <div class="layer">
         <div class="layer-flex">
-			<!-- <h1>安阳交警</h1> -->
+			<h1 class="an-title">登录</h1>
             <div class="formBox">
                 <el-form labelPosition="top" :model="loginForm" :rules="rules" ref="loginForm">
                     <el-form-item label="用户名：" prop="userName">
@@ -90,24 +90,8 @@ export default {
 		}
 	},
 	mounted(){
-		this.getinit()
 	},
     methods: {
-		getinit(){
-			// let params = {
-			// 	"username":"system",
-			// 	"password":"Tony@123",
-			// 	"remember_me":0  // 记住我 0 不记，1记
-
-			// }
-			// Api.authLogin(params)
-            // .then(function (response) {
-			// 	console.log(response);
-			// })
-			// .catch(function (error) {
-			// 	console.log(error);
-			// });
-		},
         // 点击提交
 		submitForm : function(){
 			let self = this;

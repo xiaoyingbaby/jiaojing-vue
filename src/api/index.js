@@ -2,8 +2,13 @@ const baseUrl = process.env.API_URL ? process.env.API_URL : '';
 import http from './http'
 
 export default{
+    // 登录
     authLogin(param,callbak) {
         return http.post(`${baseUrl}/v1.0/auth/login`, param, callbak)
+    },
+    // 修改密码
+    resetPsd(param,callbak) {
+        return http.post(`${baseUrl}/v1.0/auth/account`, param, callbak)
     },
     examList(param,callbak) {
         return http.get(`${baseUrl}/v1.0/management/permits`, param, callbak)

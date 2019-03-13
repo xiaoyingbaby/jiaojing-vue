@@ -54,7 +54,7 @@
 					</el-menu>
 				</div>
 				<el-main class="container-main">
-                    <el-header class="app-header" v-if="$route.meta.show_header">
+                    <el-header class="app-header">
                        <i class="iconindent collapse-icon iconfont" @click="toggleMenu" v-show="isCollapse"></i>
                        <i class="iconoutdent collapse-icon iconfont" @click="toggleMenu" v-show="!isCollapse"></i>
 					   <div class="user-wrapper">
@@ -80,12 +80,10 @@
 		</el-container>
 	</template>
 	<!-- 登陆页面 -->
-	<template v-else-if="path === 'login'">
+	<template v-else-if="path === 'login' || path === 'permit' || path === 'resetPassword'">
 		<router-view/>
 	</template>
-	<template v-else-if="path === 'permit'">
-		<router-view/>
-	</template>
+	
   </div>
 </template>
 
@@ -119,12 +117,13 @@ export default {
 			this.path = 'login';
 		}else if(path === '/permit'){
 			this.path = 'permit';
-		}else{
+		}else if(path === '/resetPassword'){
+            this.path = 'resetPassword';
+        }else{
 			this.path = 'default';
 		}
 	},
     mounted () {
-		console.log(this.$store.state,'ddd')
         const openeds = [];
         for (let i = 0; i < this.$router.options.routes.length; i++) {
             if (this.$route.path.indexOf(this.$router.options.routes[i].path) > -1) {
@@ -136,8 +135,7 @@ export default {
             };
         };
         this.openeds = openeds;
-        console.log(this.$router);
-        // console.log(this.$route.path)
+        // console.log(this.$router);
     },
     methods: {
         toggleMenu(){
@@ -159,7 +157,7 @@ export default {
         },
         // 修改密码
         xgmm(){
-            
+            this.$router.push({path: "/resetPassword"});
         }
     }
 }
