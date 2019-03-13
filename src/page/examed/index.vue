@@ -173,7 +173,7 @@
                             <router-link :to='{path:"/details",query:{id:scope.row.id,state:"FINISHED",breadcrumbitem:"审批日志"}}'
                             class="table-action mr10">查看</router-link>
                             <router-link v-if='scope.row.state !== "REFUSED"' :to='{path:"/permit",query:{id:scope.row.id,plate_number:scope.row.plate_number,permit_number:scope.row.permit_number,phone:scope.row.phone}}'
-                            class="table-action">查看通行证</router-link>
+                            class="table-action">查看电子通行证</router-link>
                             <a href="javascript:;"
                                 size="small"
                                 type="danger"
