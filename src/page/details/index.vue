@@ -3,8 +3,8 @@
         <div class="header breadcrumb-wrapper">
             <h3 class="title">查看详情</h3>
             <el-breadcrumb separator-class="el-icon-arrow-right">
-                <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-                <el-breadcrumb-item :to="{ path: '/unexam' }">{{ breadcrumbitem }}</el-breadcrumb-item>
+                <el-breadcrumb-item>首页</el-breadcrumb-item>
+                <el-breadcrumb-item>{{ breadcrumbitem }}</el-breadcrumb-item>
                 <el-breadcrumb-item>{{ breadcrumbitem == '通行证审批'?'审批':'查看详情' }}</el-breadcrumb-item>
             </el-breadcrumb>
         </div>

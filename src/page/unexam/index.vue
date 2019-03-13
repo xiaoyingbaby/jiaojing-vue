@@ -3,7 +3,7 @@
         <div class="header breadcrumb-wrapper">
             <h3 class="title">通行证审批</h3>
             <el-breadcrumb separator-class="el-icon-arrow-right">
-                <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+                <el-breadcrumb-item>首页</el-breadcrumb-item>
                 <el-breadcrumb-item>通行证审批</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
