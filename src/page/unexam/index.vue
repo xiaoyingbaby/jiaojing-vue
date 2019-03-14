@@ -73,7 +73,7 @@
                     </el-table-column>
                     <el-table-column
                         label="车辆所有人"
-                        min-width="100">
+                        min-width="70">
                         <template slot-scope="scope">
                             <p v-if='scope.row.owner'>{{scope.row.owner}}</p>
                             <p v-else>--</p>
@@ -81,7 +81,7 @@
                     </el-table-column>
                     <el-table-column
                         label="车牌号码"
-                        min-width="100">
+                        min-width="60">
                         <template slot-scope="scope">
                             <p v-if='scope.row.phone'>{{scope.row.plate_number}}</p>
                             <p v-else>--</p>
