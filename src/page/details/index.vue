@@ -42,6 +42,10 @@
                                         <th width="30%"><div class="cell">目的地</div></th>
                                         <td><div class="cell">{{ tableData.arrivals }}</div></td>
                                     </tr>
+                                     <tr>
+                                        <th width="30%"><div class="cell">路线</div></th>
+                                        <td><div class="cell">{{ tableData.route }}</div></td>
+                                    </tr>
                                     <tr>
                                         <th width="30%"><div class="cell">运输物品</div></th>
                                         <td><div class="cell">{{ tableData.goods }}</div></td>
@@ -49,6 +53,10 @@
                                     <tr>
                                         <th width="30%"><div class="cell">车辆所有人</div></th>
                                         <td><div class="cell">{{ tableData.owner }}</div></td>
+                                    </tr>
+                                    <tr>
+                                        <th width="30%"><div class="cell">车牌颜色</div></th>
+                                        <td><div class="cell">{{ vehicleType(tableData.vehicle_type) }}</div></td>
                                     </tr>
                                     <tr>
                                         <th width="30%"><div class="cell">车牌号码</div></th>
@@ -104,7 +112,8 @@
                             <div class="detailsForm">
                                 <el-form ref="form" :model="form" label-width="90px">
                                    <el-form-item label="审批状态">
-                                        <el-select v-model="form.state" placeholder="未通过">
+                                        <el-select v-model="form.state" placeholder="未处理">
+                                            <el-option label="未处理" value=""></el-option>
                                             <el-option label="通过" value="ACCEPTED"></el-option>
                                             <el-option label="未通过" value="REFUSED"></el-option>
                                         </el-select>
@@ -166,7 +175,7 @@ export default {
         return {
             tableData: [],
             form: {
-                state: 'REFUSED',
+                state: '',
                 remarks: '无',
                 start_time: '',
                 end_time: '',
@@ -194,16 +203,20 @@ export default {
                 end_time: new Date(this.form.start_time).valueOf(),
                 limit_time: this.form.limit_time,
             }
-            Api.approvalPermits(params,this.$route.query.id)
-            .then((response) =>{
-                if(response && response.status === 200){
-                    this.$router.push({path: "/unexam"});
-                }else{
+            if(this.form.state !== ""){
+                Api.approvalPermits(params,this.$route.query.id)
+                .then((response) =>{
+                    if(response && response.status === 200){
+                        this.$router.push({path: "/unexam"});
+                    }else{
 
-                }            
-            })
-            .catch(function (error) {
-            });
+                    }            
+                })
+                .catch(function (error) {
+                });
+            }else{
+                this.$router.push({path: "/unexam"});
+            }
         },
         imgUrl(url){
             if(url){
@@ -236,6 +249,22 @@ export default {
                 break;
             }
         },
+        //车牌颜色合集
+        vehicleType(type){
+            switch (type) {
+                case "yellow":
+                return "黄牌";
+                break;
+                case "blue":
+                return "蓝牌";
+                break;
+                case "green":
+                return "绿牌";
+                break;
+                default:
+                break;
+            }
+        }
     },
     computed: {
         // ...mapState({
@@ -322,5 +351,8 @@ export default {
 }
 .grid-body{
     padding: 0 10px 10px;
+}
+.el-table td img{
+    max-width: 100%;
 }
 </style>

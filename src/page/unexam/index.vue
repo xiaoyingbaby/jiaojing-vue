@@ -29,9 +29,10 @@
                 <el-table
                     :data="permitsList"
                     border
-                    style="width: 100%">
+                    >
                     <el-table-column
                         label="ID"
+                        min-width="50"
                         >
                         <template slot-scope="scope">
                             <p  v-if='scope.row.id' >{{scope.row.id}}</p>
@@ -40,77 +41,80 @@
                     </el-table-column>
                     <el-table-column
                         label="出发地"
-                        >
+                        min-width="100">
                         <template slot-scope="scope">
                             <p v-if='scope.row.from' >{{scope.row.from}}</p>
                             <p v-else>--</p>
                         </template>
                     </el-table-column>
                     <el-table-column
-                        label="目的地">
+                        label="目的地"
+                        min-width="100">
                         <template slot-scope="scope">
                             <p v-if='scope.row.arrivals'>{{scope.row.arrivals}}</p>
                             <p v-else>--</p>
                         </template>
                     </el-table-column>
                     <el-table-column
-                        label="途经路线">
+                        label="途经路线"
+                        min-width="140">
                         <template slot-scope="scope">
                             <p v-if='scope.row.route'>{{scope.row.route}}</p>
                             <p v-else>--</p>
                         </template>
                     </el-table-column>
                     <el-table-column
-                        label="运输物品">
+                        label="运输物品"
+                        min-width="100">
                         <template slot-scope="scope">
                             <p v-if='scope.row.goods'>{{scope.row.goods}}</p>
                             <p v-else>--</p>
                         </template>
                     </el-table-column>
                     <el-table-column
-                        label="车辆所有人">
+                        label="车辆所有人"
+                        min-width="100">
                         <template slot-scope="scope">
                             <p v-if='scope.row.owner'>{{scope.row.owner}}</p>
                             <p v-else>--</p>
                         </template>
                     </el-table-column>
                     <el-table-column
-                        label="手机号">
-                        <template slot-scope="scope">
-                            <p v-if='scope.row.phone'>{{scope.row.phone}}</p>
-                            <p v-else>--</p>
-                        </template>
-                    </el-table-column>
-                    <el-table-column
-                        label="车牌号码">
+                        label="车牌号码"
+                        min-width="100">
                         <template slot-scope="scope">
                             <p v-if='scope.row.phone'>{{scope.row.plate_number}}</p>
                             <p v-else>--</p>
                         </template>
                     </el-table-column>
                     <el-table-column
-                        label="途经时间起">
+                        label="途经时间起"
+                        min-width="105">
                         <template slot-scope="scope">
                             <p v-if='scope.row.start_time'>{{scope.row.start_time | date-format}}</p>
                             <p v-else>--</p>
                         </template>
                     </el-table-column>
                     <el-table-column
-                        label="途经时间止">
+                        label="途经时间止"
+                        min-width="105">
                         <template slot-scope="scope">
                             <p v-if='scope.row.end_time'>{{scope.row.end_time | date-format}}</p>
                             <p v-else>--</p>
                         </template>
                     </el-table-column>
                     <el-table-column
-                        label="申请时间">
+                        label="申请时间"
+                        min-width="105">
                         <template slot-scope="scope">
                             <p v-if='scope.row.create_time'>{{scope.row.create_time | date-format}}</p>
                             <p v-else>--</p>
                         </template>
                     </el-table-column>
                     <el-table-column
-                        label="操作">
+                        label="操作"
+                        min-width='70'
+                        fixed="right">
                         <template slot-scope="scope">
                             <router-link :to='{path:"/details",query:{id:scope.row.id,state:"APPLYING",breadcrumbitem:"通行证审批"}}'
                             class="table-action">审批</router-link>

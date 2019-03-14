@@ -11,7 +11,7 @@
                             <div class="permitList">
                                 <table class="el-table el-table--border">
                                     <tr>
-                                        <th><div class="cell">通行证编号</div></th>
+                                        <th width="30%"><div class="cell">通行证编号</div></th>
                                         <td><div class="cell">{{ tableData.permit_number }}</div></td>
                                     </tr>
                                     <tr>
@@ -144,13 +144,19 @@ export default {
     padding: 0 10px 10px;
 }
 .permitList{
-    padding: 15px;
+    padding: 10px;
     background: #fff;
 }
 @media (max-width: 768px){
+    .main{
+        padding: 10px;
+    }
     .permit{
         padding: 0;
     }
+}
+.el-table td img{
+    max-width: 100%;
 }
 
 </style>
