@@ -51,10 +51,37 @@ p{word-wrap:break-word}
 }
 /* 页面标题 */
 .an-title{
+    position: absolute;
+    left: 50%;
+    top: -80px;
     text-align: center;
     font-size: 20px;
-    color: #409EFF;
+    margin-left: -70px;
+    /* color: #409EFF; */
     padding-bottom: 20px;
+}
+.an-title img{
+    display: inline-block;
+    width: 30px;
+    vertical-align: top;
+}
+.an-title span{
+    display: inline-block;
+    vertical-align: middle;
+}
+.an-tip{
+    font-weight: normal;
+    text-align: center;
+    color: #999;
+    padding-bottom: 15px;
+}
+/* 页面底部 */
+.an-footer{
+    position: absolute;
+    bottom: 40px;
+    left: 0px;
+    width: 100%;
+    text-align: center;
 }
 /* element样式设置 */
 .el-form{
@@ -63,6 +90,6 @@ p{word-wrap:break-word}
 .el-table{
     font-size: 12px;
 }
-.el-form-item__label{
+/* .el-form-item__label{
     font-size: 12px;
-}
+} */

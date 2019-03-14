@@ -65,7 +65,7 @@
                     </el-table-column>
                     <el-table-column
                         label="运输物品"
-                        min-width="100">
+                        min-width="90">
                         <template slot-scope="scope">
                             <p v-if='scope.row.goods'>{{scope.row.goods}}</p>
                             <p v-else>--</p>
@@ -73,7 +73,7 @@
                     </el-table-column>
                     <el-table-column
                         label="车辆所有人"
-                        min-width="70">
+                        min-width="85">
                         <template slot-scope="scope">
                             <p v-if='scope.row.owner'>{{scope.row.owner}}</p>
                             <p v-else>--</p>
@@ -81,7 +81,7 @@
                     </el-table-column>
                     <el-table-column
                         label="车牌号码"
-                        min-width="60">
+                        min-width="75">
                         <template slot-scope="scope">
                             <p v-if='scope.row.phone'>{{scope.row.plate_number}}</p>
                             <p v-else>--</p>

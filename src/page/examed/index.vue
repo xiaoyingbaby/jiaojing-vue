@@ -91,7 +91,7 @@
                     <el-table-column
                         prop="gmtCreateStr"
                         label="车牌号码"
-                        min-width="80">
+                        min-width="75">
                         <template slot-scope="scope">
                             <div>
                                 <p v-if='scope.row.plate_number'>{{scope.row.plate_number}}</p>

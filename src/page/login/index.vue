@@ -1,7 +1,14 @@
 <template>
+<div class="leyer-wrapper">
+	
     <div class="layer">
         <div class="layer-flex">
-			<h1 class="an-title">登录</h1>
+			<div class="an-title">
+				<img :src="logoImg" alt="安阳交警管理平台">
+				<span>安阳交警</span>
+			</div>
+			
+			<h6 class="an-tip">请输入登陆信息</h6>
             <div class="formBox">
                 <el-form labelPosition="top" :model="loginForm" :rules="rules" ref="loginForm">
                     <el-form-item label="用户名：" prop="userName">
@@ -22,7 +29,7 @@
 						/>
                     </el-form-item>
                 </el-form>
-                <div class="footer">
+                <div class="btn-footer">
 					<el-checkbox v-model="loginForm.remember_me" class="footer-check">记住我</el-checkbox>
                     <el-button 
 						:disabled="disabled" 
@@ -36,12 +43,17 @@
         </div>
         
     </div>
-    
+	<div class="an-footer">
+		<p>Copyright © 2019  安阳市公安局交通警察支队</p>
+				<p>豫ICP备19007535号</p>
+	</div>
+</div>  
 </template>
 
 <script>
 import Api  from '../../api/index.js';
 import localDb from '../../util/localDb.js'
+import logoImg from '@/assets/images/coin.png'
 export default {
 	name: 'HelloWorld',
 	data () {
@@ -73,8 +85,10 @@ export default {
 			loginForm: {
                 userName: '',
 				password: '',
-				remember_me: true
-            },
+				remember_me: true,
+				
+			},
+			logoImg: logoImg,
             m14: 14,
             m20: 20,
             // 校验
@@ -153,6 +167,11 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang='less' scoped>
+.leyer-wrapper{
+	position: relative;
+	background:#f1f1f1;
+	
+}
 .layer{
     min-height: 100vh;
     display: -webkit-box;
@@ -168,17 +187,18 @@ export default {
     -webkit-box-direction: normal;
     -ms-flex-direction: column;
 	flex-direction: column;
-	background:#f1f1f1;
+	
     .layer-flex{
+		position: relative;
         width: 500px;
 		height: 400px;
 		border-radius: 5px;
 		background: #fff;
-		padding: 30px 70px 10px 70px;
+		padding: 30px 60px 10px 60px;
 		box-shadow: 0 0 8px rgba(0,0,0,.1);
     }
 }
-.footer{
+.btn-footer{
 	height: 40px;
 	padding-top: 20px;
 	.footer-check{

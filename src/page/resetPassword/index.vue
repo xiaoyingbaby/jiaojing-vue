@@ -1,7 +1,12 @@
 <template>
+<div class="leyer-wrapper">
 	<div class="layer">
         <div class="layer-flex">
-            <h1 class="an-title">忘记密码</h1>
+            <div class="an-title">
+				<img :src="logoImg" alt="安阳交警管理平台">
+				<span>安阳交警</span>
+            </div>
+            <h6 class="an-tip">修改密码</h6>
             <div class="formBox">
                 <el-form labelPosition="top" :model="resetPsdForm" :rules="rules" ref="resetPsdForm">
 
@@ -43,11 +48,21 @@
             </div>
         </div>
 	</div>
+    <div class="an-footer">
+		<p>Copyright © 2019  安阳市公安局交通警察支队</p>
+				<p>豫ICP备19007535号</p>
+	</div>
+</div>
 </template>
 
 <style lang="less" scoped>
 
 @red : #409EFF;
+.leyer-wrapper{
+	position: relative;
+	background:#f1f1f1;
+	
+}
 .layer{
     min-height: 100vh;
     display: -webkit-box;
@@ -65,14 +80,16 @@
 	flex-direction: column;
 	background:#f1f1f1;
     .layer-flex{
-        width: 400px;
+        position: relative;
+        width: 500px;
 		height: 500px;
 		border-radius: 5px;
 		background: #fff;
-		padding: 30px 30px 10px 30px;
+		padding: 30px 60px 10px 60px;
 		box-shadow: 0 0 8px rgba(0,0,0,.1);
     }
     .btnBox{
+        padding-top: 15px;
         text-align: right;
     }
 }
@@ -86,7 +103,7 @@
 // let clickCode = true;
 import Api  from '../../api/index.js';
 import localDb from '../../util/localDb.js'
-
+import logoImg from '@/assets/images/coin.png'
 export default{
 	components : {
 
@@ -164,6 +181,7 @@ export default{
 			}
 		}
 		return ({
+            logoImg: logoImg,
 			codeDisabled : false,
 			num : 59,
 			disabled : false,
