@@ -73,7 +73,7 @@ export default {
 			loginForm: {
                 userName: '',
 				password: '',
-				remember_me: ''
+				remember_me: true
             },
             m14: 14,
             m20: 20,
@@ -170,11 +170,11 @@ export default {
 	flex-direction: column;
 	background:#f1f1f1;
     .layer-flex{
-        width: 400px;
+        width: 500px;
 		height: 400px;
 		border-radius: 5px;
 		background: #fff;
-		padding: 30px 30px 10px 30px;
+		padding: 30px 70px 10px 70px;
 		box-shadow: 0 0 8px rgba(0,0,0,.1);
     }
 }

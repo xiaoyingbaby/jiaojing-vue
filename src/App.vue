@@ -172,8 +172,18 @@ export default {
         color: @theme-color;
     }
 }
-.app-header{
+
+// 
+.container-main{
+	max-height: 100vh;
 	position: relative;
+}
+// 右侧头部
+.app-header{
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	right: 0px;
     line-height: 60px;
 	box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
 	.user-wrapper{
@@ -195,8 +205,13 @@ export default {
 	}
 	
 }
+// 右侧内容
 .app-main{
-    // padding: 20px;
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 60px;
+	padding-top: 50px;
 }
 .el-main{
     padding : 0px;
@@ -226,7 +241,7 @@ export default {
     }
 }
 .el-menu-vertical-demo{
-    min-height: 100vh;
+    height: 100vh;
 }
 .el-menu-vertical-demo:not(.el-menu--collapse) {
     width: 200px;

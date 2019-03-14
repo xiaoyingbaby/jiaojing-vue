@@ -33,7 +33,7 @@
                 >
                     <el-table-column
                         label="ID"
-                        min-width="70"
+                        min-width="50"
                         >
                         <template slot-scope="scope">
                             <p  v-if='scope.row.id' >{{scope.row.id}}</p>
@@ -42,7 +42,7 @@
                     </el-table-column>
                     <el-table-column
                         label="通行证编号"
-                        min-width="130">
+                        min-width="110">
                         <template slot-scope="scope">
                             <p v-if='scope.row.permit_number'>{{scope.row.permit_number}}</p>
                             <p v-else>--</p>
@@ -79,7 +79,7 @@
                     <el-table-column
                         prop="gmtCreateStr"
                         label="运输物品"
-                        min-width="100">
+                        min-width="90">
                         <template slot-scope="scope">
                             <div>
                                 <p v-if='scope.row.goods'>{{scope.row.goods}}</p>
@@ -91,7 +91,7 @@
                     <el-table-column
                         prop="gmtCreateStr"
                         label="车牌号码"
-                        min-width="100">
+                        min-width="80">
                         <template slot-scope="scope">
                             <div>
                                 <p v-if='scope.row.plate_number'>{{scope.row.plate_number}}</p>
@@ -103,7 +103,7 @@
                     <el-table-column
                         prop="gmtCreateStr"
                         label="审批意见"
-                        min-width="90">
+                        min-width="75">
                         <template slot-scope="scope">
                             <div>
                                 <p v-if='scope.row.state'>{{approvalState(scope.row.state)}}</p>
@@ -115,7 +115,7 @@
                     <el-table-column
                         prop="gmtCreateStr"
                         label="途径时间起"
-                        min-width="105">
+                        min-width="110">
                         <template slot-scope="scope">
                             <div>
                                 <p v-if='scope.row.start_time'>{{scope.row.start_time | date-format}}</p>
@@ -127,7 +127,7 @@
                     <el-table-column
                         prop="gmtCreateStr"
                         label="途径时间止"
-                        min-width="105">
+                        min-width="110">
                         <template slot-scope="scope">
                             <div>
                                 <p v-if='scope.row.end_time'>{{scope.row.end_time | date-format}}</p>
@@ -139,7 +139,7 @@
                     <el-table-column
                         prop="gmtCreateStr"
                         label="批复时间"
-                        min-width="105">
+                        min-width="110">
                         <template slot-scope="scope">
                             <div>
                                 <p v-if='scope.row.approve_time'>{{scope.row.approve_time | date-format}}</p>
@@ -151,7 +151,7 @@
                     <el-table-column
                         prop="gmtCreateStr"
                         label="审批人"
-                        min-width="105">
+                        min-width="75">
                         <template slot-scope="scope">
                             <div>
                                 <p v-if='scope.row.approver'>{{scope.row.approver}}</p>

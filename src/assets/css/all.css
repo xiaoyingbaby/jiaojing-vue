@@ -1,6 +1,6 @@
 
 body,ol,ul,h1,h2,h3,h4,h5,h6,p,th,td,dl,dd,form,fieldset,legend,input,textarea,select{margin:0;padding:0}
-body{-webkit-text-size-adjust:100%;font-size:14px;font-weight: bold;}
+body{-webkit-text-size-adjust:100%;font-size:12px;font-weight: bold;}
 a{color:#177cb0;;text-decoration:none}
 a:hover{color:#177cb0;;text-decoration:none;cursor:pointer;}
 em{font-style:normal}
@@ -30,6 +30,10 @@ p{word-wrap:break-word}
 }
 /* 面包屑 */
 .breadcrumb-wrapper{
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    right: 0px;
     background: #f1f1f1;
     height: 50px;
     line-height:50px;
@@ -51,4 +55,14 @@ p{word-wrap:break-word}
     font-size: 20px;
     color: #409EFF;
     padding-bottom: 20px;
+}
+/* element样式设置 */
+.el-form{
+    font-size: 12px;
+}
+.el-table{
+    font-size: 12px;
+}
+.el-form-item__label{
+    font-size: 12px;
 }
