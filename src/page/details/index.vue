@@ -200,10 +200,11 @@ export default {
                 route: this.form.desc,
                 approval_opinion: this.form.remarks,
                 start_time: new Date(this.form.start_time).valueOf(),
-                end_time: new Date(this.form.start_time).valueOf(),
+                end_time: new Date(this.form.end_time).valueOf(),
                 limit_time: this.form.limit_time,
             }
             if(this.form.state !== ""){
+                debugger
                 Api.approvalPermits(params,this.$route.query.id)
                 .then((response) =>{
                     if(response && response.status === 200){
